@@ -28,6 +28,12 @@ const removeModule = async (
     console.log('Module: ' + moduleId + ' is not installed, cannot be removed');
   } else {
     console.log('TODO: Add remove feature');
+    console.log('TODO: Add remove feature');
+    console.log('TODO: Add remove feature');
+    console.log('TODO: Add remove feature');
+    console.log('TODO: Add remove feature');
+    console.log('TODO: Add remove feature');
+    console.log('TODO: Add remove feature');
   }
 };
 
