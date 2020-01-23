@@ -1,3 +1,10 @@
+/!\ POC, NOT READY, DO NOT USE /!\
+/!\ POC, NOT READY, DO NOT USE /!\
+/!\ POC, NOT READY, DO NOT USE /!\
+/!\ POC, NOT READY, DO NOT USE /!\
+/!\ POC, NOT READY, DO NOT USE /!\
+/!\ POC, NOT READY, DO NOT USE /!\
+
 # jahia-cli
 
 Command Line Interface to Jahia Administration panel
