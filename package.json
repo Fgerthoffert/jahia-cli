@@ -12,6 +12,8 @@
     "@oclif/config": "^1",
     "@oclif/plugin-help": "^2",
     "@types/btoa": "^1.2.3",
+    "@types/download": "^6.2.4",
+    "@types/js-yaml": "^3.12.1",
     "@types/node-fetch": "^2.5.4",
     "@types/puppeteer": "^2.0.0",
     "apollo-cache-inmemory": "^1.6.5",
@@ -20,10 +22,13 @@
     "apollo-link-error": "^1.1.12",
     "apollo-link-http": "^1.5.16",
     "btoa": "^1.2.1",
+    "download": "^7.1.0",
     "eslint-config-prettier": "^6.9.0",
     "gql": "^1.1.2",
     "graphql": "^14.5.8",
     "graphql-tag": "^2.10.1",
+    "js-yaml": "^3.13.1",
+    "load-yaml-file": "^0.2.0",
     "node-fetch": "^2.6.0",
     "puppeteer": "^2.0.0",
     "tslib": "^1"
@@ -64,7 +69,15 @@
     "bin": "jahia-cli",
     "plugins": [
       "@oclif/plugin-help"
-    ]
+    ],
+    "topics": {
+      "modules": {
+        "description": "Operation on Jahia modules"
+      },
+      "manifest": {
+        "description": "Manifests operation on Jahia for CI/CD"
+      }
+    }
   },
   "repository": "jahia/jahia-cli",
   "scripts": {

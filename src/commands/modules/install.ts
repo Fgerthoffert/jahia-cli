@@ -1,5 +1,6 @@
 import { flags } from '@oclif/command';
 import { performance } from 'perf_hooks';
+import * as fs from 'fs';
 
 import Command from '../../base';
 
@@ -40,6 +41,11 @@ export default class Modules extends Command {
 
     if (flags.file === undefined) {
       console.log('ERROR: Please specify a filepath');
+      exit();
+    }
+
+    if (!fs.existsSync(flags.file)) {
+      console.log('ERROR: Unable to access file: ' + flags.file);
       exit();
     }
 
