@@ -33,11 +33,6 @@ jobs:
           root: .
           paths: .
 
-  jahia-cli-node-10:
-    <<: *jahia-cli-test
-    docker:
-      - image: node:10
-
   jahia-cli-node-12:
     <<: *jahia-cli-test
     docker:
@@ -139,7 +134,6 @@ workflows:
   lint-and-test:
     jobs:
       - jahia-cli-node-latest
-      - jahia-cli-node-10
       - jahia-cli-node-12
       - jahia-cli-cache:
           filters:
