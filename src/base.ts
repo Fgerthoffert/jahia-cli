@@ -1,8 +1,7 @@
-import Command, {flags} from '@oclif/command'
+import Command, { flags } from '@oclif/command';
 
 export default abstract class extends Command {
   static flags = {
-    // eslint-disable-next-line
     jahiaAdminUrl: flags.string({
       required: true,
       env: 'JAHIA_ADMIN_URL',

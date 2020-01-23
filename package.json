@@ -20,6 +20,7 @@
     "apollo-link-error": "^1.1.12",
     "apollo-link-http": "^1.5.16",
     "btoa": "^1.2.1",
+    "eslint-config-prettier": "^6.9.0",
     "gql": "^1.1.2",
     "graphql": "^14.5.8",
     "graphql-tag": "^2.10.1",
@@ -44,7 +45,7 @@
     "typescript": "^3.3"
   },
   "engines": {
-    "node": ">=8.0.0"
+    "node": ">=12.14.1"
   },
   "files": [
     "/bin",

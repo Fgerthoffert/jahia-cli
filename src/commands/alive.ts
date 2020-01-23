@@ -1,12 +1,10 @@
-import {flags} from '@oclif/command'
-import {performance} from 'perf_hooks'
+import { flags } from '@oclif/command';
+import { performance } from 'perf_hooks';
 
-import Command from '../base'
+import Command from '../base';
 
-import gqlClient from '../utils/gqlClient'
-import waitAlive from '../utils/waitAlive'
-
-import {exit} from '@oclif/errors'
+import gqlClient from '../utils/gqlClient';
+import waitAlive from '../utils/waitAlive';
 
 export default class Modules extends Command {
   static description =
@@ -14,21 +12,21 @@ export default class Modules extends Command {
 
   static flags = {
     ...Command.flags,
-    help: flags.help({char: 'h'}),
+    help: flags.help({ char: 'h' }),
   };
 
-  static args = [{name: 'file'}];
+  static args = [{ name: 'file' }];
 
   async run() {
-    const {flags} = this.parse(Modules)
-    const t0 = performance.now()
+    const { flags } = this.parse(Modules);
+    const t0 = performance.now();
 
-    const gClient = await gqlClient(flags)
-    await waitAlive(gClient)
+    const gClient = await gqlClient(flags);
+    await waitAlive(gClient);
 
-    const t1 = performance.now()
+    const t1 = performance.now();
     console.log(
-      'Total Exceution time: ' + Math.round(t1 - t0) + ' milliseconds.'
-    )
+      'Total Exceution time: ' + Math.round(t1 - t0) + ' milliseconds.',
+    );
   }
 }
