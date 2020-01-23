@@ -33,9 +33,14 @@ export default class Modules extends Command {
     const t0 = performance.now();
 
     if (flags.manifest === undefined) {
-      console.log('ERROR: Please specify a filepath');
+      console.log('ERROR: Please specify a manifest file');
       exit();
     }
+    if (fs.existsSync(flags.manifest) === false) {
+      console.log('ERROR: Unable to locate manifest file');
+      exit();
+    }
+
     const manifestContent = await loadYamlFile(flags.manifest);
     if (
       manifestContent.modules !== undefined &&
