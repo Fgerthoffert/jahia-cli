@@ -6,6 +6,7 @@ const isInstalled = async (
   moduleVersion?: string | undefined,
 ) => {
   const moduleData = await getModule(page, moduleId);
+  console.log(moduleData);
   if (moduleVersion !== undefined) {
     if (
       moduleData.module === moduleId &&
