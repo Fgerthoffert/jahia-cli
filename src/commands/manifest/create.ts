@@ -14,7 +14,7 @@ export default class Modules extends Command {
   static flags = {
     ...Command.flags,
     help: flags.help({ char: 'h' }),
-    filepath: flags.string({
+    manifest: flags.string({
       required: true,
       description: 'Specify the directory to generate the manifest file into',
     }),
@@ -26,7 +26,7 @@ export default class Modules extends Command {
     const { flags } = this.parse(Modules);
     const t0 = performance.now();
 
-    if (flags.filepath === undefined) {
+    if (flags.manifest === undefined) {
       console.log('ERROR: Please specify a filepath to save the manifest to');
       exit();
     }
@@ -59,7 +59,7 @@ export default class Modules extends Command {
       ],
     };
 
-    const filepathname = flags.filepath;
+    const filepathname = flags.manifest;
     if (fs.existsSync(filepathname) === false) {
       fs.writeFileSync(filepathname, jsYaml.safeDump(defaultManifest));
       console.log('Manifest created: ' + filepathname);
