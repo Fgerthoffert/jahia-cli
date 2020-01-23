@@ -3,7 +3,7 @@ import { performance } from 'perf_hooks';
 
 import Command from '../base';
 
-import gqlClient from '../utils/gqlClient';
+import graphqlClient from '../utils/graphql/client';
 import waitAlive from '../utils/waitAlive';
 
 export default class Modules extends Command {
@@ -21,7 +21,7 @@ export default class Modules extends Command {
     const { flags } = this.parse(Modules);
     const t0 = performance.now();
 
-    const gClient = await gqlClient(flags);
+    const gClient = await graphqlClient(flags);
     await waitAlive(gClient);
 
     const t1 = performance.now();

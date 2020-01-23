@@ -4,9 +4,9 @@ import { ApolloLink } from 'apollo-link';
 import { HttpLink } from 'apollo-link-http';
 import fetch from 'node-fetch';
 
-import { ConfigFlags } from '../../global';
+import { ConfigFlags } from '../../../global';
 
-const gqlClient = async (cmdConfig: ConfigFlags) => {
+const graphqlClient = async (cmdConfig: ConfigFlags) => {
   const httpLink = new HttpLink({
     uri: cmdConfig.jahiaAdminUrl + '/modules/graphql',
     fetch: fetch as any, // eslint-disable-line no-explicit-any
@@ -40,4 +40,4 @@ const gqlClient = async (cmdConfig: ConfigFlags) => {
   });
 };
 
-export default gqlClient;
+export default graphqlClient;
