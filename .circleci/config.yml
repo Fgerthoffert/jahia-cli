@@ -1,10 +1,4 @@
 version: 2.1
-executors:
-  docker-publisher:
-    environment:
-      IMAGE_NAME: zencrepes/jahia-cli
-    docker:
-      - image: circleci/buildpack-deps:stretch
 
 jobs:
   jahia-cli-node-latest: &jahia-cli-test
@@ -115,7 +109,7 @@ jobs:
 
 workflows:
   version: 2
-  build-npm-and-docker:
+  build-npm:
     jobs:
       - npm-publish:
           filters:
