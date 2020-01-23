@@ -1,6 +1,5 @@
 import cli from 'cli-ux';
 import { performance } from 'perf_hooks';
-import { exit } from '@oclif/errors';
 
 import { ConfigFlags } from '../../../global';
 

@@ -1,6 +1,5 @@
 import { flags } from '@oclif/command';
 import { performance } from 'perf_hooks';
-import * as puppeteer from 'puppeteer';
 
 import Command from '../../base';
 
