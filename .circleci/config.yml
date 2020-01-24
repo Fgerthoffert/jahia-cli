@@ -32,7 +32,7 @@ jobs:
   jahia-cli-node-12:
     <<: *jahia-cli-test
     docker:
-      - image: circleci:12-browsers
+      - image: circleci/node:12-browsers
 
   jahia-cli-cache:
     <<: *jahia-cli-test
