@@ -4,6 +4,8 @@ jobs:
   jahia-cli-node-latest: &jahia-cli-test
     docker:
       - image: node:latest
+    environment:
+      PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: true
     working_directory: ~/jahia-cli
     steps:
       - checkout
@@ -49,6 +51,8 @@ jobs:
   npm-publish:
     docker:
       - image: node:latest
+    environment:
+      PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: true
     working_directory: ~/jahia-cli
     steps:
       - checkout
