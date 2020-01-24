@@ -124,26 +124,23 @@ jobs:
             - v1-npm-jahia-cli-{{checksum ".circleci/config.yml"}}-{{checksum "yarn.lock"}}
             - v1-npm-jahia-cli-{{checksum ".circleci/config.yml"}}
       - run:
-          name: Install jahia-cli
-          command: sudo npm install -g jahia-cli
+          name: Install jahia from yarn
+          command: yarn
       - run:
           name: Check jahia-cli help
-          command: jahia-cli --help
-      #      - run:
-      #          name: Run Jahia docker (latest)
-      #          command: docker run -p 8080:8080 -d jahia/jahia-dev:latest
+          command: ./bin/run --help
       - run:
           name: Wait for Jahia to be alive
-          command: jahia-cli alive
+          command: ./bin/run alive
       - run:
           name: Generate a default manifest
-          command: jahia-cli manifest:create --filepath=/tmp/manifest.yml
+          command: ./bin/run manifest:create --filepath=/tmp/manifest.yml
       - run:
           name: Loading the assets from the default manifest
-          command: jahia-cli assets:load --manifest=/tmp/manifest.yml
+          command: ./bin/run assets:load --manifest=/tmp/manifest.yml
       - run:
           name: Loading the assets from the default manifest
-          command: jahia-cli modules:batch --manifest=/tmp/manifest.yml
+          command: ./bin/run modules:batch --manifest=/tmp/manifest.yml
 
 workflows:
   version: 2
