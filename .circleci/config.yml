@@ -50,7 +50,7 @@ jobs:
   # Publish a new version of the jahia-cli to NPM
   npm-publish:
     docker:
-      - image: node:latest
+      - image: circleci/node:latest-browsers
     environment:
       PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: true
     working_directory: ~/jahia-cli
@@ -114,7 +114,7 @@ jobs:
   jahia-cli-integration-tests:
     <<: *jahia-cli-test
     docker:
-      - image: circleci:latest-browsers
+      - image: circleci/node:latest-browsers
     environment:
       PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: true
     steps:
