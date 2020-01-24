@@ -128,7 +128,6 @@ jobs:
           command: npm publish
 
   # Re-run integration tests, but this time with the published package
-
   npm-test:
     docker:
       - image: circleci/node:latest-browsers

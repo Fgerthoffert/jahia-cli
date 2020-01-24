@@ -13,6 +13,12 @@ export default class Modules extends Command {
   static flags = {
     ...Command.flags,
     help: flags.help({ char: 'h' }),
+    timeout: flags.string({
+      required: false,
+      char: 't',
+      description:
+        'Specify a timeout after which the process will exit with an error',
+    }),
   };
 
   static args = [{ name: 'file' }];
@@ -22,7 +28,14 @@ export default class Modules extends Command {
     const t0 = performance.now();
 
     const gClient = await graphqlClient(flags);
-    await waitAlive(gClient);
+    let timeout =
+      flags.timeout === undefined
+        ? undefined
+        : Math.round(Number.parseInt(flags.timeout, 10) * 1000);
+    if (timeout === 0) {
+      timeout = 2000; // By default timeout, if specified, is a minimum of 2 seconds
+    }
+    await waitAlive(gClient, timeout);
 
     const t1 = performance.now();
     console.log(
