@@ -134,7 +134,7 @@ jobs:
           command: ./bin/run alive
       - run:
           name: Generate a default manifest
-          command: ./bin/run manifest:create --filepath=/tmp/manifest.yml
+          command: ./bin/run manifest:create --manifest=/tmp/manifest.yml
       - run:
           name: Loading the assets from the default manifest
           command: ./bin/run assets:load --manifest=/tmp/manifest.yml
