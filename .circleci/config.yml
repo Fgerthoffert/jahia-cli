@@ -3,13 +3,13 @@ version: 2.1
 jobs:
   jahia-cli-node-latest: &jahia-cli-test
     docker:
-      - image: node:latest
+      - image: node:latest-browsers
     environment:
       PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: true
     working_directory: ~/jahia-cli
     steps:
       - checkout
-      - restore_cache: &jahia-cli-restore_cache
+      - restore_cache:
           keys:
             - v1-npm-jahia-cli-{{checksum ".circleci/config.yml"}}-{{checksum "yarn.lock"}}
             - v1-npm-jahia-cli-{{checksum ".circleci/config.yml"}}
@@ -32,7 +32,7 @@ jobs:
   jahia-cli-node-12:
     <<: *jahia-cli-test
     docker:
-      - image: node:12
+      - image: node:12-browsers
 
   jahia-cli-cache:
     <<: *jahia-cli-test
@@ -111,6 +111,32 @@ jobs:
           name: Display help
           command: jahia-cli --help
 
+  jahia-cli-integration-tests:
+    <<: *jahia-cli-test
+    docker:
+      - image: node:latest-browsers
+    environment:
+      PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: true
+    steps:
+      - run:
+          name: Check jahia-cli help
+          command: ./bin/run --help
+      - run:
+          name: Run Jahia docker (latest)
+          command: docker run -p 8080:8080 -d jahia/jahia-dev:latest
+      - run:
+          name: Wait for Jahia to be alive
+          command: ./bin/run alive
+      - run:
+          name: Generate a default manifest
+          command: ./bin/run manifest:create --manifest=/tmp/manifest.yml
+      - run:
+          name: Loading the assets from the default manifest
+          command: ./bin/run assets:load --manifest=/tmp/manifest.yml
+      - run:
+          name: Loading the assets from the default manifest
+          command: ./bin/run modules:batch --manifest=/tmp/manifest.yml
+
 workflows:
   version: 2
   build-npm:
@@ -133,6 +159,7 @@ workflows:
     jobs:
       - jahia-cli-node-latest
       - jahia-cli-node-12
+      - jahia-cli-integration-tests
       - jahia-cli-cache:
           filters:
             tags:
