@@ -3,7 +3,7 @@ version: 2.1
 jobs:
   jahia-cli-node-latest: &jahia-cli-test
     docker:
-      - image: node:latest-browsers
+      - image: circleci/node:latest-browsers
     environment:
       PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: true
     working_directory: ~/jahia-cli
@@ -32,7 +32,7 @@ jobs:
   jahia-cli-node-12:
     <<: *jahia-cli-test
     docker:
-      - image: node:12-browsers
+      - image: circleci:12-browsers
 
   jahia-cli-cache:
     <<: *jahia-cli-test
@@ -114,7 +114,7 @@ jobs:
   jahia-cli-integration-tests:
     <<: *jahia-cli-test
     docker:
-      - image: node:latest-browsers
+      - image: circleci:latest-browsers
     environment:
       PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: true
     steps:
