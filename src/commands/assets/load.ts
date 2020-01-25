@@ -43,7 +43,7 @@ export default class Modules extends Command {
       manifestContent.assets.length > 0
     ) {
       const gClient = await graphqlClient(flags);
-      await waitAlive(gClient);
+      await waitAlive(gClient, 500000); // Wait for 500s by default
       const browser = await launchPuppeteer(!flags.debug);
       const jahiaPage = await openJahia(browser, flags);
 

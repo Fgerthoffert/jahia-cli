@@ -1,5 +1,6 @@
 import { flags } from '@oclif/command';
 import { performance } from 'perf_hooks';
+import * as fs from 'fs';
 
 import Command from '../../base';
 
@@ -8,18 +9,24 @@ import closePuppeteer from '../../utils/puppeteer/close';
 import graphqlClient from '../../utils/graphql/client';
 import waitAlive from '../../utils/waitAlive';
 import openJahia from '../../utils/openJahia';
-import checkModule from '../../components/modules/check';
 
 import { exit } from '@oclif/errors';
 
 export default class Modules extends Command {
-  static description =
-    'Check if a module is installed by providing its version';
+  static description = 'Installs a Web Project';
 
   static flags = {
     ...Command.flags,
     help: flags.help({ char: 'h' }),
-    id: flags.string({ description: 'Module Id' }),
+    file: flags.string({
+      required: true,
+      description:
+        'Specify the filepath to the web project to be installed (zip on the filesystem)',
+    }),
+    sitekey: flags.string({
+      required: true,
+      description: 'Site Key of the web project to be installed',
+    }),
   };
 
   static args = [{ name: 'file' }];
@@ -28,8 +35,13 @@ export default class Modules extends Command {
     const { flags } = this.parse(Modules);
     const t0 = performance.now();
 
-    if (flags.id === undefined) {
-      console.log('ERROR: Please specify an id');
+    if (flags.file === undefined) {
+      console.log('ERROR: Please specify a filepath');
+      exit();
+    }
+
+    if (!fs.existsSync(flags.file)) {
+      console.log('ERROR: Unable to access file: ' + flags.file);
       exit();
     }
 
@@ -38,11 +50,16 @@ export default class Modules extends Command {
     const browser = await launchPuppeteer(!flags.debug);
     const jahiaPage = await openJahia(browser, flags);
 
-    const installedModule = await checkModule(jahiaPage, flags, flags.id);
+    console.log('TO BE IMPLEMENTED');
+    console.log('TO BE IMPLEMENTED');
+    console.log('TO BE IMPLEMENTED');
+    console.log('TO BE IMPLEMENTED');
+    console.log('TO BE IMPLEMENTED');
+    console.log('TO BE IMPLEMENTED');
+    console.log('TO BE IMPLEMENTED');
+
     await jahiaPage.close();
     await closePuppeteer(browser);
-
-    console.log(installedModule);
 
     const t1 = performance.now();
     console.log(

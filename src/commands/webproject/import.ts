@@ -8,18 +8,21 @@ import closePuppeteer from '../../utils/puppeteer/close';
 import graphqlClient from '../../utils/graphql/client';
 import waitAlive from '../../utils/waitAlive';
 import openJahia from '../../utils/openJahia';
-import checkModule from '../../components/modules/check';
+
+import importWebproject from '../../components/webprojects/import';
 
 import { exit } from '@oclif/errors';
 
 export default class Modules extends Command {
-  static description =
-    'Check if a module is installed by providing its version';
+  static description = 'Import a prepackaged project';
 
   static flags = {
     ...Command.flags,
     help: flags.help({ char: 'h' }),
-    id: flags.string({ description: 'Module Id' }),
+    sitekey: flags.string({
+      required: true,
+      description: 'Site Key of the project to be imported',
+    }),
   };
 
   static args = [{ name: 'file' }];
@@ -28,8 +31,8 @@ export default class Modules extends Command {
     const { flags } = this.parse(Modules);
     const t0 = performance.now();
 
-    if (flags.id === undefined) {
-      console.log('ERROR: Please specify an id');
+    if (flags.sitekey === undefined) {
+      console.log('ERROR: Please specify a project site key');
       exit();
     }
 
@@ -38,11 +41,10 @@ export default class Modules extends Command {
     const browser = await launchPuppeteer(!flags.debug);
     const jahiaPage = await openJahia(browser, flags);
 
-    const installedModule = await checkModule(jahiaPage, flags, flags.id);
+    await importWebproject(jahiaPage, flags, flags.sitekey);
+
     await jahiaPage.close();
     await closePuppeteer(browser);
-
-    console.log(installedModule);
 
     const t1 = performance.now();
     console.log(
