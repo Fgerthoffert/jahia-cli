@@ -1,18 +1,30 @@
 import cli from 'cli-ux';
+import { exit } from '@oclif/errors';
+import { performance } from 'perf_hooks';
+
 import gql from 'graphql-tag';
 
 import { sleep } from '..';
 import gqlQuery from './gql';
 
-const waitAlive = async (gqlClient: any) => {
-  cli.action.start('Waiting for Jahia to be online');
+const isAlive = (data: any) => {
+  if (data.data === undefined || data.data.jcr.workspace !== 'EDIT') {
+    return false;
+  }
+  return true;
+};
+
+const checkStatus = async (
+  gqlClient: any,
+  timeout: number | undefined, // in ms
+  timeSinceStart: number, // in ms
+) => {
+  console.log('Time since start: ' + timeSinceStart + 'ms');
   let data: any = {}; // eslint-disable-line no-explicit-any
-  let callsCount = 0;
-  do {
-    callsCount += 1;
-    if (callsCount > 1) {
-      await sleep(2000); // eslint-disable-line no-await-in-loop
-    }
+  if (
+    timeout === undefined ||
+    (timeout !== undefined && timeSinceStart < timeout)
+  ) {
     try {
       // eslint-disable-next-line no-await-in-loop
       data = await gqlClient.query({
@@ -24,10 +36,26 @@ const waitAlive = async (gqlClient: any) => {
       });
     } catch (error) {
       console.log(error.message);
-      continue;
     }
-  } while (data.data === undefined || data.data.jcr.workspace !== 'EDIT');
-  cli.action.stop(' done');
+    const time = Math.round(timeSinceStart + performance.now());
+    if (isAlive(data) === false) {
+      await sleep(2000);
+      data = await checkStatus(gqlClient, timeout, time);
+    }
+  }
+  return data;
+};
+
+const waitAlive = async (gqlClient: any, timeout: number | undefined) => {
+  cli.action.start('Waiting for Jahia to be online');
+
+  const data = await checkStatus(gqlClient, timeout, 0);
+  if (isAlive(data) === false) {
+    console.log(
+      'ERROR: Unable to validate alive state, most likely expired timeout',
+    );
+    exit();
+  }
   return true;
 };
 
