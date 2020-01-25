@@ -8,6 +8,7 @@ import closePuppeteer from '../../utils/puppeteer/close';
 import graphqlClient from '../../utils/graphql/client';
 import waitAlive from '../../utils/waitAlive';
 import openJahia from '../../utils/openJahia';
+import navPage from '../../utils/navPage';
 import removeModule from '../../components/modules/remove';
 
 import { exit } from '@oclif/errors';
@@ -37,7 +38,13 @@ export default class Modules extends Command {
     const browser = await launchPuppeteer(!flags.debug);
     const jahiaPage = await openJahia(browser, flags);
 
-    await removeModule(jahiaPage, flags, flags.id);
+    await navPage(
+      jahiaPage,
+      flags.jahiaAdminUrl +
+        '/cms/adminframe/default/en/settings.manageModules.html',
+    );
+
+    await removeModule(jahiaPage, flags.id);
     await jahiaPage.close();
     await closePuppeteer(browser);
 

@@ -79,6 +79,9 @@
       },
       "manifest": {
         "description": "Manifests operation on Jahia for CI/CD"
+      },
+      "webprojects": {
+        "description": "Operation on Jahia Web Projects"
       }
     }
   },

@@ -1,45 +1,21 @@
 import cli from 'cli-ux';
 import { performance } from 'perf_hooks';
 
-import { ConfigFlags } from '../../../global';
-
 import getWebprojects from '../utils/get-webprojects';
+import getAvailable from '../utils/get-available';
 import { exit } from '@oclif/errors';
 
-/* eslint max-params: ["error", 5] */
-const importWebproject = async (
-  page: any,
-  cmdConfig: ConfigFlags,
-  sitekey: string,
-) => {
-  const t0 = performance.now();
-
-  cli.action.start('Navigation to the modules page');
-  await page.goto(
-    cmdConfig.jahiaAdminUrl +
-      '/cms/adminframe/default/en/settings.webProjectSettings.html',
-    {
-      waitUntil: 'networkidle0',
-    },
-  );
-  cli.action.stop(' done (' + Math.round(performance.now() - t0) + ' ms)');
-
+const createWebproject = async (page: any, sitekey: string) => {
   // Only install the module if it doesn't exist already
   const installedWebprojects = await getWebprojects(page);
   if (installedWebprojects.includes(sitekey) === false) {
     cli.action.start('Importing webproject: ' + sitekey);
     const t1 = performance.now();
 
-    const webProjectsValues = await page.evaluate(() =>
-      [
-        ...document.querySelectorAll(
-          'select[name=selectedPrepackagedSite] option',
-        ),
-      ].map(element => element.getAttribute('value')),
-    );
+    const webProjects = await getAvailable(page);
 
-    const selectedProject = webProjectsValues.find(
-      (p: any) => p.match(/#([\s\S]*)$/)[1] === sitekey, // eslint-disable-line no-explicit-any
+    const selectedProject = webProjects.find(
+      (p: { sitekey: string; value: string }) => p.sitekey === sitekey, // eslint-disable-line no-explicit-any
     );
     if (selectedProject === undefined) {
       console.log('Error: Unable to find sitekey in list of prepackaged sites');
@@ -70,4 +46,4 @@ const importWebproject = async (
   }
 };
 
-export default importWebproject;
+export default createWebproject;

@@ -1,31 +1,16 @@
 import cli from 'cli-ux';
 import { performance } from 'perf_hooks';
 
-import { ConfigFlags } from '../../../global';
-
 import isInstalled from '../utils/is-installed';
 import { exit } from '@oclif/errors';
 
 /* eslint max-params: ["error", 5] */
 const installModule = async (
   page: any,
-  cmdConfig: ConfigFlags,
   moduleFilepath: string,
   moduleId: string,
   moduleVersion: string | undefined,
 ) => {
-  const t0 = performance.now();
-
-  cli.action.start('Navigation to the modules page');
-  await page.goto(
-    cmdConfig.jahiaAdminUrl +
-      '/cms/adminframe/default/en/settings.manageModules.html',
-    {
-      waitUntil: 'networkidle0',
-    },
-  );
-  cli.action.stop(' done (' + Math.round(performance.now() - t0) + ' ms)');
-
   // Only install the module if it doesn't exist already
   const moduleInstalled = await isInstalled(page, moduleId, moduleVersion);
   if (moduleInstalled === false) {

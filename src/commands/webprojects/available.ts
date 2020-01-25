@@ -1,6 +1,6 @@
 import { flags } from '@oclif/command';
+
 import { performance } from 'perf_hooks';
-import * as fs from 'fs';
 
 import Command from '../../base';
 
@@ -9,24 +9,16 @@ import closePuppeteer from '../../utils/puppeteer/close';
 import graphqlClient from '../../utils/graphql/client';
 import waitAlive from '../../utils/waitAlive';
 import openJahia from '../../utils/openJahia';
+import navPage from '../../utils/navPage';
 
-import { exit } from '@oclif/errors';
+import getAvailable from '../../components/webprojects/utils/get-available';
 
 export default class Modules extends Command {
-  static description = 'Installs a Web Project';
+  static description = 'List available prepackaged projects';
 
   static flags = {
     ...Command.flags,
     help: flags.help({ char: 'h' }),
-    file: flags.string({
-      required: true,
-      description:
-        'Specify the filepath to the web project to be installed (zip on the filesystem)',
-    }),
-    sitekey: flags.string({
-      required: true,
-      description: 'Site Key of the web project to be installed',
-    }),
   };
 
   static args = [{ name: 'file' }];
@@ -35,29 +27,18 @@ export default class Modules extends Command {
     const { flags } = this.parse(Modules);
     const t0 = performance.now();
 
-    if (flags.file === undefined) {
-      console.log('ERROR: Please specify a filepath');
-      exit();
-    }
-
-    if (!fs.existsSync(flags.file)) {
-      console.log('ERROR: Unable to access file: ' + flags.file);
-      exit();
-    }
-
     const gClient = await graphqlClient(flags);
     await waitAlive(gClient, 500000); // Wait for 500s by default
     const browser = await launchPuppeteer(!flags.debug);
     const jahiaPage = await openJahia(browser, flags);
 
-    console.log('TO BE IMPLEMENTED');
-    console.log('TO BE IMPLEMENTED');
-    console.log('TO BE IMPLEMENTED');
-    console.log('TO BE IMPLEMENTED');
-    console.log('TO BE IMPLEMENTED');
-    console.log('TO BE IMPLEMENTED');
-    console.log('TO BE IMPLEMENTED');
+    await navPage(
+      jahiaPage,
+      flags.jahiaAdminUrl +
+        '/cms/adminframe/default/en/settings.webProjectSettings.html',
+    );
 
+    const availableWebprojects = await getAvailable(jahiaPage);
     await jahiaPage.close();
     await closePuppeteer(browser);
 
@@ -65,5 +46,7 @@ export default class Modules extends Command {
     console.log(
       'Total Exceution time: ' + Math.round(t1 - t0) + ' milliseconds.',
     );
+    console.log(JSON.stringify(availableWebprojects));
+    return JSON.stringify(availableWebprojects);
   }
 }

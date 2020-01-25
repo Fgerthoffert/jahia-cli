@@ -11,27 +11,30 @@ import waitAlive from '../../utils/waitAlive';
 import openJahia from '../../utils/openJahia';
 import navPage from '../../utils/navPage';
 
-import installModule from '../../components/modules/install';
+import importPrepackagedWebproject from '../../components/webprojects/importprepackaged';
+import importFileWebproject from '../../components/webprojects/importfile';
 
 import { exit } from '@oclif/errors';
 
 export default class Modules extends Command {
-  static description = 'Installs a module';
+  static description = 'Create a site by importing a prepackaged project';
 
   static flags = {
     ...Command.flags,
     help: flags.help({ char: 'h' }),
-    file: flags.string({
+    type: flags.string({
       required: true,
+      options: ['file', 'prepackaged'],
+      default: 'prepackaged',
       description:
-        'Specify the filepath to the module to be installed (jar on filesystem)',
+        'Specify if you want to import by file or by prepackaged site',
     }),
-    id: flags.string({
+    sitekey: flags.string({
       required: true,
-      description: 'Module Id',
+      description: 'Site Key of the project to be imported',
     }),
-    version: flags.string({
-      description: 'Specify the module version to be installed',
+    file: flags.string({
+      description: 'Filepath of the archive to be imported',
     }),
   };
 
@@ -41,13 +44,22 @@ export default class Modules extends Command {
     const { flags } = this.parse(Modules);
     const t0 = performance.now();
 
-    if (flags.file === undefined) {
-      console.log('ERROR: Please specify a filepath');
+    if (flags.sitekey === undefined) {
+      console.log('ERROR: Please specify a project site key');
       exit();
     }
 
-    if (!fs.existsSync(flags.file)) {
-      console.log('ERROR: Unable to access file: ' + flags.file);
+    if (flags.type === 'file' && flags.file === undefined) {
+      console.log('ERROR: Please specify a file to be imported');
+      exit();
+    }
+
+    if (
+      flags.type === 'file' &&
+      flags.file !== undefined &&
+      fs.existsSync(flags.file) === false
+    ) {
+      console.log('ERROR: Unable to find the specified file');
       exit();
     }
 
@@ -59,10 +71,15 @@ export default class Modules extends Command {
     await navPage(
       jahiaPage,
       flags.jahiaAdminUrl +
-        '/cms/adminframe/default/en/settings.manageModules.html',
+        '/cms/adminframe/default/en/settings.webProjectSettings.html',
     );
 
-    await installModule(jahiaPage, flags.file, flags.id, flags.version);
+    if (flags.type === 'prepackaged') {
+      await importPrepackagedWebproject(jahiaPage, flags.sitekey);
+    } else if (flags.file !== undefined && flags.type === 'file') {
+      await importFileWebproject(jahiaPage, flags.sitekey, flags.file);
+    }
+
     await jahiaPage.close();
     await closePuppeteer(browser);
 

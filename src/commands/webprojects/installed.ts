@@ -1,4 +1,5 @@
 import { flags } from '@oclif/command';
+
 import { performance } from 'perf_hooks';
 
 import Command from '../../base';
@@ -8,21 +9,16 @@ import closePuppeteer from '../../utils/puppeteer/close';
 import graphqlClient from '../../utils/graphql/client';
 import waitAlive from '../../utils/waitAlive';
 import openJahia from '../../utils/openJahia';
+import navPage from '../../utils/navPage';
 
-import importWebproject from '../../components/webprojects/import';
-
-import { exit } from '@oclif/errors';
+import getWebprojects from '../../components/webprojects/utils/get-webprojects';
 
 export default class Modules extends Command {
-  static description = 'Import a prepackaged project';
+  static description = 'List installed Web Projects';
 
   static flags = {
     ...Command.flags,
     help: flags.help({ char: 'h' }),
-    sitekey: flags.string({
-      required: true,
-      description: 'Site Key of the project to be imported',
-    }),
   };
 
   static args = [{ name: 'file' }];
@@ -31,17 +27,19 @@ export default class Modules extends Command {
     const { flags } = this.parse(Modules);
     const t0 = performance.now();
 
-    if (flags.sitekey === undefined) {
-      console.log('ERROR: Please specify a project site key');
-      exit();
-    }
-
     const gClient = await graphqlClient(flags);
     await waitAlive(gClient, 500000); // Wait for 500s by default
     const browser = await launchPuppeteer(!flags.debug);
     const jahiaPage = await openJahia(browser, flags);
 
-    await importWebproject(jahiaPage, flags, flags.sitekey);
+    await navPage(
+      jahiaPage,
+      flags.jahiaAdminUrl +
+        '/cms/adminframe/default/en/settings.webProjectSettings.html',
+    );
+
+    const installedWebprojects = await getWebprojects(jahiaPage);
+    console.log(installedWebprojects);
 
     await jahiaPage.close();
     await closePuppeteer(browser);
@@ -50,5 +48,6 @@ export default class Modules extends Command {
     console.log(
       'Total Exceution time: ' + Math.round(t1 - t0) + ' milliseconds.',
     );
+    return JSON.stringify(installedWebprojects);
   }
 }

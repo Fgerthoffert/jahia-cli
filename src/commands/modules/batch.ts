@@ -10,6 +10,8 @@ import closePuppeteer from '../../utils/puppeteer/close';
 import graphqlClient from '../../utils/graphql/client';
 import waitAlive from '../../utils/waitAlive';
 import openJahia from '../../utils/openJahia';
+import navPage from '../../utils/navPage';
+
 import installModule from '../../components/modules/install';
 
 import { exit } from '@oclif/errors';
@@ -51,6 +53,12 @@ export default class Modules extends Command {
       const browser = await launchPuppeteer(!flags.debug);
       const jahiaPage = await openJahia(browser, flags);
 
+      await navPage(
+        jahiaPage,
+        flags.jahiaAdminUrl +
+          '/cms/adminframe/default/en/settings.manageModules.html',
+      );
+
       for (const jahiaModule of manifestContent.modules) {
         if (fs.existsSync(jahiaModule.filepath) === false) {
           console.log('ERROR: Unable to access file: ' + jahiaModule.filepath);
@@ -59,7 +67,6 @@ export default class Modules extends Command {
         // eslint-disable-next-line no-await-in-loop
         await installModule(
           jahiaPage,
-          flags,
           jahiaModule.filepath,
           jahiaModule.id,
           jahiaModule.version,

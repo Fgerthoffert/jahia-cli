@@ -8,13 +8,14 @@ import closePuppeteer from '../../utils/puppeteer/close';
 import graphqlClient from '../../utils/graphql/client';
 import waitAlive from '../../utils/waitAlive';
 import openJahia from '../../utils/openJahia';
-import checkModule from '../../components/modules/check';
+import navPage from '../../utils/navPage';
+
+import getModule from '../../components/modules/utils/get-module';
 
 import { exit } from '@oclif/errors';
 
 export default class Modules extends Command {
-  static description =
-    'Check if a module is installed by providing its version';
+  static description = 'Check if a module is installed by providing its id';
 
   static flags = {
     ...Command.flags,
@@ -38,7 +39,14 @@ export default class Modules extends Command {
     const browser = await launchPuppeteer(!flags.debug);
     const jahiaPage = await openJahia(browser, flags);
 
-    const installedModule = await checkModule(jahiaPage, flags, flags.id);
+    await navPage(
+      jahiaPage,
+      flags.jahiaAdminUrl +
+        '/cms/adminframe/default/en/settings.manageModules.html',
+    );
+
+    const installedModule = await getModule(jahiaPage, flags.id);
+
     await jahiaPage.close();
     await closePuppeteer(browser);
 
