@@ -9,7 +9,7 @@ import { exit } from '@oclif/errors';
 import * as loadYamlFile from 'load-yaml-file';
 import * as hash from 'object-hash';
 
-export default class Modules extends Command {
+export default class ManifestId extends Command {
   static description = 'Generates a unique ID from a manifest content';
 
   static flags = {
@@ -24,7 +24,7 @@ export default class Modules extends Command {
   static args = [{ name: 'file' }];
 
   async run() {
-    const { flags } = this.parse(Modules);
+    const { flags } = this.parse(ManifestId);
     const t0 = performance.now();
 
     if (flags.manifest === undefined) {

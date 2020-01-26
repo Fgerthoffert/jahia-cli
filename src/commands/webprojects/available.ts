@@ -1,4 +1,5 @@
 import { flags } from '@oclif/command';
+
 import { performance } from 'perf_hooks';
 
 import Command from '../../base';
@@ -9,29 +10,22 @@ import graphqlClient from '../../utils/graphql/client';
 import waitAlive from '../../utils/waitAlive';
 import openJahia from '../../utils/openJahia';
 import navPage from '../../utils/navPage';
-import removeModule from '../../components/modules/remove';
 
-import { exit } from '@oclif/errors';
+import getAvailable from '../../components/webprojects/utils/get-available';
 
-export default class ModulesRemove extends Command {
-  static description = 'Remove a module by id';
+export default class WebprojectsAvailable extends Command {
+  static description = 'List available prepackaged projects';
 
   static flags = {
     ...Command.flags,
     help: flags.help({ char: 'h' }),
-    id: flags.string({ description: 'Module Id' }),
   };
 
   static args = [{ name: 'file' }];
 
   async run() {
-    const { flags } = this.parse(ModulesRemove);
+    const { flags } = this.parse(WebprojectsAvailable);
     const t0 = performance.now();
-
-    if (flags.id === undefined) {
-      console.log('ERROR: Please specify an id');
-      exit();
-    }
 
     const gClient = await graphqlClient(flags);
     await waitAlive(gClient, 500000); // Wait for 500s by default
@@ -41,10 +35,10 @@ export default class ModulesRemove extends Command {
     await navPage(
       jahiaPage,
       flags.jahiaAdminUrl +
-        '/cms/adminframe/default/en/settings.manageModules.html',
+        '/cms/adminframe/default/en/settings.webProjectSettings.html',
     );
 
-    await removeModule(jahiaPage, flags.id);
+    const availableWebprojects = await getAvailable(jahiaPage);
     await jahiaPage.close();
     await closePuppeteer(browser);
 
@@ -52,5 +46,7 @@ export default class ModulesRemove extends Command {
     console.log(
       'Total Exceution time: ' + Math.round(t1 - t0) + ' milliseconds.',
     );
+    console.log(JSON.stringify(availableWebprojects));
+    return JSON.stringify(availableWebprojects);
   }
 }

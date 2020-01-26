@@ -14,7 +14,7 @@ import openJahia from '../../utils/openJahia';
 
 import { exit } from '@oclif/errors';
 
-export default class Modules extends Command {
+export default class LoadAssets extends Command {
   static description =
     'Download assets from a manifest to the local filesystem';
 
@@ -30,7 +30,7 @@ export default class Modules extends Command {
   static args = [{ name: 'file' }];
 
   async run() {
-    const { flags } = this.parse(Modules);
+    const { flags } = this.parse(LoadAssets);
     const t0 = performance.now();
 
     if (flags.manifest === undefined) {
@@ -43,7 +43,7 @@ export default class Modules extends Command {
       manifestContent.assets.length > 0
     ) {
       const gClient = await graphqlClient(flags);
-      await waitAlive(gClient);
+      await waitAlive(gClient, 500000); // Wait for 500s by default
       const browser = await launchPuppeteer(!flags.debug);
       const jahiaPage = await openJahia(browser, flags);
 

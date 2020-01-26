@@ -9,11 +9,13 @@ import closePuppeteer from '../../utils/puppeteer/close';
 import graphqlClient from '../../utils/graphql/client';
 import waitAlive from '../../utils/waitAlive';
 import openJahia from '../../utils/openJahia';
+import navPage from '../../utils/navPage';
+
 import installModule from '../../components/modules/install';
 
 import { exit } from '@oclif/errors';
 
-export default class Modules extends Command {
+export default class ModulesInstall extends Command {
   static description = 'Installs a module';
 
   static flags = {
@@ -26,7 +28,7 @@ export default class Modules extends Command {
     }),
     id: flags.string({
       required: true,
-      description: 'Module Id',
+      description: 'Module Id (string or comma separated strings)',
     }),
     version: flags.string({
       description: 'Specify the module version to be installed',
@@ -36,7 +38,7 @@ export default class Modules extends Command {
   static args = [{ name: 'file' }];
 
   async run() {
-    const { flags } = this.parse(Modules);
+    const { flags } = this.parse(ModulesInstall);
     const t0 = performance.now();
 
     if (flags.file === undefined) {
@@ -50,11 +52,17 @@ export default class Modules extends Command {
     }
 
     const gClient = await graphqlClient(flags);
-    await waitAlive(gClient);
+    await waitAlive(gClient, 500000); // Wait for 500s by default
     const browser = await launchPuppeteer(!flags.debug);
     const jahiaPage = await openJahia(browser, flags);
 
-    await installModule(jahiaPage, flags, flags.file, flags.id, flags.version);
+    await navPage(
+      jahiaPage,
+      flags.jahiaAdminUrl +
+        '/cms/adminframe/default/en/settings.manageModules.html',
+    );
+
+    await installModule(jahiaPage, flags.file, flags.id, flags.version);
     await jahiaPage.close();
     await closePuppeteer(browser);
 
