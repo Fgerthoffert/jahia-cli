@@ -165,9 +165,19 @@ workflows:
       - npm-publish:
           requires:
             - initialize
+          filters:
+            tags:
+              only: /^v.*/
+            branches:
+              ignore: /.*/
       - npm-test:
           requires:
             - npm-publish
+          filters:
+            tags:
+              only: /^v.*/
+            branches:
+              ignore: /.*/
   lint-and-test:
     jobs:
       - initialize:
