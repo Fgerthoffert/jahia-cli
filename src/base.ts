@@ -20,6 +20,18 @@ export default abstract class extends Command {
       default: 'root',
       description: 'Jahia Administrator interface Password',
     }),
+    jahiaToolsUsername: flags.string({
+      required: true,
+      env: 'JAHIA_TOOLS_USERNAME',
+      default: 'jahia',
+      description: 'Jahia Tools (modules/tools) Username',
+    }),
+    jahiaToolsPassword: flags.string({
+      required: true,
+      env: 'JAHIA_TOOLS_PASSWORD',
+      default: 'password',
+      description: 'Jahia Tools Password',
+    }),
     debug: flags.boolean({
       char: 'd',
       description: 'Enable debug mode (display chrome browser)',

@@ -64,6 +64,10 @@ export default class Modules extends Command {
         { id: 'addstuff', filepath: '/tmp/addstuff-1.3.jar' },
       ],
       webproject: [{ sitekey: 'digitall', filepath: '/tmp/digitall.zip' }],
+      groovy: [
+        { filepath: '/tmp/jahia-test.groovy' },
+        { filepath: '/tmp/jahia-test2.groovy' },
+      ],
     };
 
     const filepathname = flags.manifest;
