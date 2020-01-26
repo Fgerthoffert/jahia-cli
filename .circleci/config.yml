@@ -98,10 +98,10 @@ jobs:
       - *attach-workspace
       - run:
           name: Install Typescript
-          command: npm -g install typescript
+          command: sudo npm -g install typescript
       - run:
           name: Install oclif-dev
-          command: npm -g install @oclif/dev-cli
+          command: sudo npm -g install @oclif/dev-cli
       - run:
           name: Authenticate with NPM registry
           command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > .npmrc
