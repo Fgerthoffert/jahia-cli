@@ -9,7 +9,7 @@ import { submitGroovy } from '../../utils/tools';
 
 import { exit } from '@oclif/errors';
 
-export default class Modules extends Command {
+export default class GroovyBatch extends Command {
   static description = 'Install modules from a manifest file';
 
   static flags = {
@@ -24,7 +24,7 @@ export default class Modules extends Command {
   static args = [{ name: 'file' }];
 
   async run() {
-    const { flags } = this.parse(Modules);
+    const { flags } = this.parse(GroovyBatch);
     const t0 = performance.now();
 
     if (flags.manifest === undefined) {

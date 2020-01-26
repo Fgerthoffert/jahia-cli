@@ -13,7 +13,7 @@ import navPage from '../../utils/navPage';
 
 import getWebprojects from '../../components/webprojects/utils/get-webprojects';
 
-export default class Modules extends Command {
+export default class WebprojectsInstalled extends Command {
   static description = 'List installed Web Projects';
 
   static flags = {
@@ -24,7 +24,7 @@ export default class Modules extends Command {
   static args = [{ name: 'file' }];
 
   async run() {
-    const { flags } = this.parse(Modules);
+    const { flags } = this.parse(WebprojectsInstalled);
     const t0 = performance.now();
 
     const gClient = await graphqlClient(flags);

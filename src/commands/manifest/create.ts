@@ -8,7 +8,7 @@ import Command from '../../base';
 
 import { exit } from '@oclif/errors';
 
-export default class Modules extends Command {
+export default class ManifestCreate extends Command {
   static description = 'Creates an empty manifest file';
 
   static flags = {
@@ -23,7 +23,7 @@ export default class Modules extends Command {
   static args = [{ name: 'file' }];
 
   async run() {
-    const { flags } = this.parse(Modules);
+    const { flags } = this.parse(ManifestCreate);
     const t0 = performance.now();
 
     if (flags.manifest === undefined) {
@@ -62,6 +62,11 @@ export default class Modules extends Command {
         { id: 'popperjs', filepath: '/tmp/popperjs-1.16.0.jar' },
         { id: 'highlightjs', filepath: '/tmp/highlightjs-9.12.1.jar' },
         { id: 'addstuff', filepath: '/tmp/addstuff-1.3.jar' },
+        {
+          id:
+            'database-connector,elasticsearch-connector-7,augmented-search,augmented-search-ui',
+          filepath: '/tmp/augmented-search.jar',
+        },
       ],
       webproject: [{ sitekey: 'digitall', filepath: '/tmp/digitall.zip' }],
       groovy: [

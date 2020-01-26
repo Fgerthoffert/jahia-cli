@@ -6,7 +6,7 @@ import Command from '../base';
 import graphqlClient from '../utils/graphql/client';
 import waitAlive from '../utils/waitAlive';
 
-export default class Modules extends Command {
+export default class Alive extends Command {
   static description =
     'Indefinitely wait until a Jahia instance becomes available';
 
@@ -24,7 +24,7 @@ export default class Modules extends Command {
   static args = [{ name: 'file' }];
 
   async run() {
-    const { flags } = this.parse(Modules);
+    const { flags } = this.parse(Alive);
     const t0 = performance.now();
 
     const gClient = await graphqlClient(flags);

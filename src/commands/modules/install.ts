@@ -15,7 +15,7 @@ import installModule from '../../components/modules/install';
 
 import { exit } from '@oclif/errors';
 
-export default class Modules extends Command {
+export default class ModulesInstall extends Command {
   static description = 'Installs a module';
 
   static flags = {
@@ -28,7 +28,7 @@ export default class Modules extends Command {
     }),
     id: flags.string({
       required: true,
-      description: 'Module Id',
+      description: 'Module Id (string or comma separated strings)',
     }),
     version: flags.string({
       description: 'Specify the module version to be installed',
@@ -38,7 +38,7 @@ export default class Modules extends Command {
   static args = [{ name: 'file' }];
 
   async run() {
-    const { flags } = this.parse(Modules);
+    const { flags } = this.parse(ModulesInstall);
     const t0 = performance.now();
 
     if (flags.file === undefined) {

@@ -16,7 +16,7 @@ import installModule from '../../components/modules/install';
 
 import { exit } from '@oclif/errors';
 
-export default class Modules extends Command {
+export default class ModulesBatch extends Command {
   static description = 'Install modules from a manifest file';
 
   static flags = {
@@ -31,7 +31,7 @@ export default class Modules extends Command {
   static args = [{ name: 'file' }];
 
   async run() {
-    const { flags } = this.parse(Modules);
+    const { flags } = this.parse(ModulesBatch);
     const t0 = performance.now();
 
     if (flags.manifest === undefined) {

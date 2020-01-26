@@ -14,7 +14,7 @@ import getModule from '../../components/modules/utils/get-module';
 
 import { exit } from '@oclif/errors';
 
-export default class Modules extends Command {
+export default class ModulesCheck extends Command {
   static description = 'Check if a module is installed by providing its id';
 
   static flags = {
@@ -26,7 +26,7 @@ export default class Modules extends Command {
   static args = [{ name: 'file' }];
 
   async run() {
-    const { flags } = this.parse(Modules);
+    const { flags } = this.parse(ModulesCheck);
     const t0 = performance.now();
 
     if (flags.id === undefined) {

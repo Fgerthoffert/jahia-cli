@@ -13,7 +13,7 @@ import navPage from '../../utils/navPage';
 
 import getAvailable from '../../components/webprojects/utils/get-available';
 
-export default class Modules extends Command {
+export default class WebprojectsAvailable extends Command {
   static description = 'List available prepackaged projects';
 
   static flags = {
@@ -24,7 +24,7 @@ export default class Modules extends Command {
   static args = [{ name: 'file' }];
 
   async run() {
-    const { flags } = this.parse(Modules);
+    const { flags } = this.parse(WebprojectsAvailable);
     const t0 = performance.now();
 
     const gClient = await graphqlClient(flags);

@@ -8,7 +8,7 @@ import { submitGroovy } from '../../utils/tools';
 
 import { exit } from '@oclif/errors';
 
-export default class Modules extends Command {
+export default class GroovyExecute extends Command {
   static description = 'Executes a groovy script by providing its filename';
 
   static flags = {
@@ -27,7 +27,7 @@ export default class Modules extends Command {
   static args = [{ name: 'file' }];
 
   async run() {
-    const { flags } = this.parse(Modules);
+    const { flags } = this.parse(GroovyExecute);
     const t0 = performance.now();
 
     if (flags.file === undefined) {

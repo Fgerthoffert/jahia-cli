@@ -16,7 +16,7 @@ import importFileWebproject from '../../components/webprojects/importfile';
 
 import { exit } from '@oclif/errors';
 
-export default class Modules extends Command {
+export default class WebprojectsImport extends Command {
   static description = 'Create a site by importing a prepackaged project';
 
   static flags = {
@@ -41,7 +41,7 @@ export default class Modules extends Command {
   static args = [{ name: 'file' }];
 
   async run() {
-    const { flags } = this.parse(Modules);
+    const { flags } = this.parse(WebprojectsImport);
     const t0 = performance.now();
 
     if (flags.sitekey === undefined) {

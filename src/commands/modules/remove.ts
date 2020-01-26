@@ -13,7 +13,7 @@ import removeModule from '../../components/modules/remove';
 
 import { exit } from '@oclif/errors';
 
-export default class Modules extends Command {
+export default class ModulesRemove extends Command {
   static description = 'Remove a module by id';
 
   static flags = {
@@ -25,7 +25,7 @@ export default class Modules extends Command {
   static args = [{ name: 'file' }];
 
   async run() {
-    const { flags } = this.parse(Modules);
+    const { flags } = this.parse(ModulesRemove);
     const t0 = performance.now();
 
     if (flags.id === undefined) {
