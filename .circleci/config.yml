@@ -80,11 +80,11 @@ jobs:
           name: Generate a default manifest
           command: ./bin/run manifest:create --manifest=/tmp/manifest.yml
       - run:
-          name: Executing jobs from the default manifest
-          command: ./bin/run jobs:run --manifest=/tmp/manifest.yml
-      - run:
           name: Checking if an individual module has been installed
-          command: ./bin/run modules:check --id=popperjs
+          command: ./bin/run modules:check --id=addstuff
+      - run:
+          name: Fetch a module from the store
+          command: wget https://store.jahia.com/cms/mavenproxy/private-app-store/org/jahia/modules/addstuff/1.3/addstuff-1.3.jar -P /tmp/
       - run:
           name: Manually installing a module
           command: ./bin/run modules:install --file=/tmp/addstuff-1.3.jar --id=addstuff
@@ -149,11 +149,11 @@ jobs:
           name: Generate a default manifest
           command: jahia-cli manifest:create --manifest=/tmp/manifest.yml
       - run:
-          name: Executing jobs from the default manifest
-          command: jahia-cli jobs:run --manifest=/tmp/manifest.yml
-      - run:
           name: Checking if an individual module has been installed
-          command: jahia-cli modules:check --id=popperjs
+          command: jahia-cli modules:check --id=addstuff
+      - run:
+          name: Fetch a module from the store
+          command: wget https://store.jahia.com/cms/mavenproxy/private-app-store/org/jahia/modules/addstuff/1.3/addstuff-1.3.jar -P /tmp/
       - run:
           name: Manually installing a module
           command: jahia-cli modules:install --file=/tmp/addstuff-1.3.jar --id=addstuff
