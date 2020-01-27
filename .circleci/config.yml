@@ -80,11 +80,14 @@ jobs:
           name: Generate a default manifest
           command: ./bin/run manifest:create --manifest=/tmp/manifest.yml
       - run:
-          name: Loading the assets from the default manifest
-          command: ./bin/run assets:load --manifest=/tmp/manifest.yml
+          name: Executing jobs from the default manifest
+          command: ./bin/run jobs:run --manifest=/tmp/manifest.yml
       - run:
-          name: Loading the assets from the default manifest
-          command: ./bin/run modules:batch --manifest=/tmp/manifest.yml
+          name: Checking if an individual module has been installed
+          command: ./bin/run modules:check --id=popperjs
+      - run:
+          name: Manually installing a module
+          command: ./bin/run modules:install --file=/tmp/addstuff-1.3.jar --id=addstuff
 
   # Publish a new version of the jahia-cli to NPM
   npm-publish:
@@ -146,11 +149,14 @@ jobs:
           name: Generate a default manifest
           command: jahia-cli manifest:create --manifest=/tmp/manifest.yml
       - run:
-          name: Loading the assets from the default manifest
-          command: jahia-cli assets:load --manifest=/tmp/manifest.yml
+          name: Executing jobs from the default manifest
+          command: jahia-cli jobs:run --manifest=/tmp/manifest.yml
       - run:
-          name: Loading the assets from the default manifest
-          command: jahia-cli modules:batch --manifest=/tmp/manifest.yml
+          name: Checking if an individual module has been installed
+          command: jahia-cli modules:check --id=popperjs
+      - run:
+          name: Manually installing a module
+          command: jahia-cli modules:install --file=/tmp/addstuff-1.3.jar --id=addstuff
 
 workflows:
   version: 2

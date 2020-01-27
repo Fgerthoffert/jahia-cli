@@ -32,46 +32,61 @@ export default class ManifestCreate extends Command {
     }
 
     const defaultManifest = {
-      assets: [
+      version: 1,
+      jobs: [
         {
-          type: 'http',
+          type: 'asset',
+          fetch: 'http',
           source:
             'https://store.jahia.com/cms/mavenproxy/private-app-store/org/jahia/modules/popperjs/1.16.0/popperjs-1.16.0.jar',
           filepath: '/tmp/popperjs-1.16.0.jar',
         },
         {
-          type: 'http',
+          type: 'module',
+          id: 'popperjs',
+          filepath: '/tmp/popperjs-1.16.0.jar',
+        },
+        {
+          type: 'asset',
+          fetch: 'http',
           source:
             'https://store.jahia.com/cms/mavenproxy/private-app-store/org/jahia/modules/highlightjs/9.12.1/highlightjs-9.12.1.jar',
           filepath: '/tmp/highlightjs-9.12.1.jar',
         },
         {
-          type: 'http',
+          type: 'module',
+          id: 'highlightjs',
+          filepath: '/tmp/highlightjs-9.12.1.jar',
+        },
+        {
+          type: 'asset',
+          fetch: 'http',
           source:
             'https://store.jahia.com/cms/mavenproxy/private-app-store/org/jahia/modules/addstuff/1.3/addstuff-1.3.jar',
           filepath: '/tmp/addstuff-1.3.jar',
         },
         {
-          type: 'http',
+          type: 'module',
+          id: 'addstuff',
+          filepath: '/tmp/addstuff-1.3.jar',
+        },
+        {
+          type: 'asset',
+          fetch: 'http',
           source:
             'https://store.jahia.com/cms/mavenproxy/private-app-store/org/jahia/modules/digitall/1.1.0/digitall-1.1.0.jar',
           filepath: '/tmp/digitall.zip',
         },
-      ],
-      modules: [
-        { id: 'popperjs', filepath: '/tmp/popperjs-1.16.0.jar' },
-        { id: 'highlightjs', filepath: '/tmp/highlightjs-9.12.1.jar' },
-        { id: 'addstuff', filepath: '/tmp/addstuff-1.3.jar' },
         {
-          id:
-            'database-connector,elasticsearch-connector-7,augmented-search,augmented-search-ui',
-          filepath: '/tmp/augmented-search.jar',
+          type: 'webproject',
+          source: 'prepackaged',
+          sitekey: 'digitall',
+          filepath: '/tmp/digitall.zip',
         },
-      ],
-      webproject: [{ sitekey: 'digitall', filepath: '/tmp/digitall.zip' }],
-      groovy: [
-        { filepath: '/tmp/jahia-test.groovy' },
-        { filepath: '/tmp/jahia-test2.groovy' },
+        {
+          type: 'groovy',
+          filepath: '/tmp/jahia-test.groovy',
+        },
       ],
     };
 

@@ -30,7 +30,7 @@ const installModule = async (
   page: any,
   moduleFilepath: string,
   moduleId: string,
-  moduleVersion: string | undefined,
+  moduleVersion?: string | undefined,
 ) => {
   // Some moduels are metapackages containing other modules, in that case we provide as moduleId a comma separated list of modules
   let moduleIds = [moduleId];
