@@ -49,10 +49,10 @@ const installModule = async (
         moduleId +
         ' uploading file...',
     );
-    cli.action.start('Uploading file: ' + moduleFilepath);
     const t1 = performance.now();
 
     const uploadField = await page.$('input[name=moduleFile]');
+    cli.action.start('Uploading file: ' + moduleFilepath);
     await uploadField.uploadFile(moduleFilepath);
 
     const uploadBtn = await page.$('button[id=btnUpload]');
