@@ -4,8 +4,6 @@ import { performance } from 'perf_hooks';
 import getWebprojects from '../utils/get-webprojects';
 import { exit } from '@oclif/errors';
 
-import { sleep } from '../../../utils';
-
 const importFileWebproject = async (
   page: any,
   sitekey: string,
@@ -25,21 +23,17 @@ const importFileWebproject = async (
       importInput.click(),
     ]);
 
-    await sleep(5000);
-
     await fileChooser.accept([filepath]);
     const button = await page.$(
       '#importForm > div > div:nth-child(2) > div > div > span > button',
     );
     await Promise.all([page.waitForNavigation(), button.click()]);
-    await sleep(5000);
 
     const importSite = await page.$('button[name="_eventId_processImport"]');
     await Promise.all([
       page.waitForNavigation({ timeout: 600000 }),
       importSite.click(),
     ]);
-    await sleep(5000);
 
     const installedWebprojects = await getWebprojects(page);
     if (
