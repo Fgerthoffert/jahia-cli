@@ -9,7 +9,9 @@ const getEndpoint = async (endpoint: string, token: string) => {
       },
     });
   } catch (error) {
-    console.log(error);
+    if (error.response.data.message !== undefined) {
+      console.log(error.response.data.message);
+    }
     if (error.response.data.errinfo !== undefined) {
       console.log(error.response.data.errinfo);
     }
