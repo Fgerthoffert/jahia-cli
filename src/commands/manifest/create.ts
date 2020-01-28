@@ -90,16 +90,17 @@ export default class ManifestCreate extends Command {
       ],
       // List source docker images that would be used in the absence of corresponding images
       docker: {
+        repository: 'jahia/qa-poc',
         images: [
           {
             name: 'Elasticsearch',
             source: 'docker.elastic.co/elasticsearch/elasticsearch:7.5.0',
-            destination: 'jahia/qa-poc:es',
+            prefix: 'es',
           },
           {
             name: 'Jahia',
             source: 'jahia/jahia-dev:latest',
-            destination: 'jahia/qa-poc:es',
+            prefix: 'j',
           },
         ],
       },

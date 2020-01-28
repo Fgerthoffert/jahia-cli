@@ -1,5 +1,6 @@
 import { flags } from '@oclif/command';
 import { performance } from 'perf_hooks';
+import * as loadYamlFile from 'load-yaml-file';
 
 import * as fs from 'fs';
 
@@ -8,10 +9,12 @@ import Command from '../../base';
 import { exit } from '@oclif/errors';
 
 import getId from '../../components/manifest/id';
-import fetchTags from '../../components/docker/fetch-tags';
+import getToken from '../../components/docker/get-token';
+import getEndpoint from '../../components/docker/get-endpoint';
 
 export default class GetImgName extends Command {
-  static description = 'Check if an image exists in docker hub';
+  static description =
+    'Returns the docker image name to be used based on manifest content and hash';
 
   static flags = {
     ...Command.flags,
@@ -44,16 +47,43 @@ export default class GetImgName extends Command {
     }
 
     // For each image in the manifest, check if a corresponding image exists
-    const allTags = await fetchTags(
-      'https://registry.hub.docker.com/v2/jahia/qa-poc/tags/list',
+    const userToken = await getToken(
       flags.dockerRegistryUsername,
       flags.dockerRegistryPassword,
     );
-    console.log(allTags);
+    if (userToken === null) {
+      console.log('ERROR: Unable to get token from Docker Hub (login failed)');
+      exit();
+    } else {
+      const manifestContent = await loadYamlFile(flags.manifest);
 
-    const t1 = performance.now();
-    console.log(
-      'Total Exceution time: ' + Math.round(t1 - t0) + ' milliseconds.',
-    );
+      const allTags = await getEndpoint(
+        'https://hub.docker.com/v2/repositories/' +
+          manifestContent.docker.repository +
+          '/tags',
+        userToken,
+      );
+      console.log(allTags);
+      const repoTags = allTags.map((t: { name: string }) => t.name);
+
+      const images = [];
+      for (const dockerImage of manifestContent.docker.images) {
+        const searchTag = dockerImage.prefix + '-' + manifestId;
+        if (repoTags.includes(searchTag)) {
+          images.push({
+            ...dockerImage,
+            destination: manifestContent.docker.repositori + ':' + searchTag,
+          });
+        } else {
+          images.push({ ...dockerImage, destination: dockerImage.source });
+        }
+      }
+      console.log(images);
+      const t1 = performance.now();
+      console.log(
+        'Total Exceution time: ' + Math.round(t1 - t0) + ' milliseconds.',
+      );
+      return images;
+    }
   }
 }
