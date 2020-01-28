@@ -83,7 +83,7 @@ export default class GetImgName extends Command {
       console.log(
         'Total Exceution time: ' + Math.round(t1 - t0) + ' milliseconds.',
       );
-      return images;
+      return JSON.stringify(images);
     }
   }
 }
