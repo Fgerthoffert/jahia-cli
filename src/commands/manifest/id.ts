@@ -41,6 +41,8 @@ export default class ManifestId extends Command {
     console.log(
       'Total Exceution time: ' + Math.round(t1 - t0) + ' milliseconds.',
     );
-    return manifestId;
+    if (flags.output !== undefined) {
+      fs.writeFileSync(flags.output, JSON.stringify({ id: manifestId }));
+    }
   }
 }
