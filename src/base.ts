@@ -48,5 +48,8 @@ export default abstract class extends Command {
       char: 'd',
       description: 'Enable debug mode (display chrome browser)',
     }),
+    output: flags.string({
+      description: 'Output values to the filesystem (such as payload)',
+    }),
   };
 }

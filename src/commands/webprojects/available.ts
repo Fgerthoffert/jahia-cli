@@ -1,6 +1,7 @@
 import { flags } from '@oclif/command';
 
 import { performance } from 'perf_hooks';
+import * as fs from 'fs';
 
 import Command from '../../base';
 
@@ -47,6 +48,11 @@ export default class WebprojectsAvailable extends Command {
       'Total Exceution time: ' + Math.round(t1 - t0) + ' milliseconds.',
     );
     console.log(JSON.stringify(availableWebprojects));
-    return JSON.stringify(availableWebprojects);
+    if (flags.output !== undefined) {
+      fs.writeFileSync(
+        flags.output,
+        JSON.stringify({ id: availableWebprojects }),
+      );
+    }
   }
 }
