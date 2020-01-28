@@ -32,6 +32,18 @@ export default abstract class extends Command {
       default: 'password',
       description: 'Jahia Tools Password',
     }),
+    dockerRegistryUsername: flags.string({
+      required: true,
+      env: 'DOCKER_REGISTRY_USERNAME',
+      default: 'username',
+      description: 'Docker registry (i.e. docker hub) username',
+    }),
+    dockerRegistryPassword: flags.string({
+      required: true,
+      env: 'DOCKER_REGISTRY_PASSWORD',
+      default: 'password',
+      description: 'Docker registry (i.e. docker hub) password',
+    }),
     debug: flags.boolean({
       char: 'd',
       description: 'Enable debug mode (display chrome browser)',

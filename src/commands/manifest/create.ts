@@ -88,6 +88,22 @@ export default class ManifestCreate extends Command {
           filepath: '/tmp/jahia-test.groovy',
         },
       ],
+      // List source docker images that would be used in the absence of corresponding images
+      docker: {
+        repository: 'jahia/qa-poc',
+        images: [
+          {
+            name: 'Elasticsearch',
+            source: 'docker.elastic.co/elasticsearch/elasticsearch:7.5.0',
+            prefix: 'es',
+          },
+          {
+            name: 'Jahia',
+            source: 'jahia/jahia-dev:latest',
+            prefix: 'j',
+          },
+        ],
+      },
     };
 
     const filepathname = flags.manifest;

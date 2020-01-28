@@ -6,8 +6,8 @@ import * as fs from 'fs';
 import Command from '../../base';
 
 import { exit } from '@oclif/errors';
-import * as loadYamlFile from 'load-yaml-file';
-import * as hash from 'object-hash';
+
+import getId from '../../components/manifest/id';
 
 export default class ManifestId extends Command {
   static description = 'Generates a unique ID from a manifest content';
@@ -36,18 +36,11 @@ export default class ManifestId extends Command {
       exit();
     }
 
-    const filepathname = flags.manifest;
-    if (fs.existsSync(filepathname) === true) {
-      const manifestContent = await loadYamlFile(flags.manifest);
-      const manifestHash = hash(manifestContent);
-      console.log('Manifest Hash is: ' + manifestHash);
-    } else {
-      console.log('ERROR: Could not fine manifest file: ' + filepathname);
-    }
-
+    const manifestId = await getId(flags.manifest);
     const t1 = performance.now();
     console.log(
       'Total Exceution time: ' + Math.round(t1 - t0) + ' milliseconds.',
     );
+    return manifestId;
   }
 }

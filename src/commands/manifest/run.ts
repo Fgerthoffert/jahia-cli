@@ -20,7 +20,7 @@ import { submitGroovy } from '../../utils/tools';
 
 import { exit } from '@oclif/errors';
 
-export default class JobsRun extends Command {
+export default class ManifestRun extends Command {
   static description = 'Install modules from a manifest file';
 
   static flags = {
@@ -35,7 +35,7 @@ export default class JobsRun extends Command {
   static args = [{ name: 'file' }];
 
   async run() {
-    const { flags } = this.parse(JobsRun);
+    const { flags } = this.parse(ManifestRun);
     const t0 = performance.now();
 
     if (flags.manifest === undefined) {
