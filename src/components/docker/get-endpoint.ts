@@ -10,11 +10,14 @@ const getEndpoint = async (endpoint: string, token: string) => {
     });
   } catch (error) {
     console.log(error);
+    if (error.response.data.errinfo !== undefined) {
+      console.log(error.response.data.errinfo);
+    }
   }
   if (response !== null && response.data.results !== undefined) {
     return response.data.results;
   }
-  return null;
+  return [];
 };
 
 export default getEndpoint;

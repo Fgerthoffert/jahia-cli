@@ -14,8 +14,10 @@ const getToken = async (username: string, password: string) => {
     },
   );
   if (getToken.data.token !== undefined) {
+    console.log('Docker Hub authentication obtained from credentials');
     return getToken.data.token;
   }
+  console.log('Failed to fetch token from Docker hub');
   return null;
 };
 
