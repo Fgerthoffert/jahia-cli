@@ -72,10 +72,15 @@ export default class GetImgName extends Command {
         if (repoTags.includes(searchTag)) {
           images.push({
             ...dockerImage,
-            destination: manifestContent.docker.repositori + ':' + searchTag,
+            destination: manifestContent.docker.repository + ':' + searchTag,
+            action: 'run',
           });
         } else {
-          images.push({ ...dockerImage, destination: dockerImage.source });
+          images.push({
+            ...dockerImage,
+            destination: dockerImage.source,
+            action: 'build',
+          });
         }
       }
       console.log(images);
