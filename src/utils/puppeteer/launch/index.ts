@@ -6,6 +6,7 @@ const launchPuppeteer = async (headless: boolean) => {
     defaultViewport: null,
     args: [
       '--disable-dev-shm-usage',
+      '--start-maximized',
       //      '--start-fullscreen',
       //      '--no-sandbox',
       //      '--disable-setuid-sandbox',

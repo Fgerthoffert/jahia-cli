@@ -51,22 +51,24 @@ export default class ManifestRun extends Command {
     if (manifestContent.jobs !== undefined && manifestContent.jobs.length > 0) {
       const gClient = await graphqlClient(flags);
       await waitAlive(gClient, 500000); // Wait for 500s by default
-      const browser = await launchPuppeteer(!flags.debug);
-      const jahiaPage = await openJahia(browser, flags);
 
+      let browser = null;
+      let jahiaPage = null;
       for (const job of manifestContent.jobs) {
+        if (['webproject', 'groovy'].includes(job.type)) {
+          if (browser === null) {
+            // eslint-disable-next-line no-await-in-loop
+            browser = await launchPuppeteer(!flags.debug);
+            // eslint-disable-next-line no-await-in-loop
+            jahiaPage = await openJahia(browser, flags);
+          }
+        }
         if (job.type === 'asset') {
           // eslint-disable-next-line no-await-in-loop
           await assetsFetch(job);
         } else if (job.type === 'module') {
           // eslint-disable-next-line no-await-in-loop
-          await navPage(
-            jahiaPage,
-            flags.jahiaAdminUrl +
-              '/cms/adminframe/default/en/settings.manageModules.html',
-          );
-          // eslint-disable-next-line no-await-in-loop
-          await installModule(jahiaPage, job.filepath, job.id);
+          await installModule(flags, job.filepath, job.id);
         } else if (job.type === 'webproject') {
           // eslint-disable-next-line no-await-in-loop
           await navPage(
