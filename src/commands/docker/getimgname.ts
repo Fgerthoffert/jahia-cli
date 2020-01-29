@@ -73,12 +73,14 @@ export default class GetImgName extends Command {
           images.push({
             ...dockerImage,
             destination: manifestContent.docker.repository + ':' + searchTag,
+            commit: null,
             action: 'run',
           });
         } else {
           images.push({
             ...dockerImage,
             destination: dockerImage.source,
+            commit: manifestContent.docker.repository + ':' + searchTag,
             action: 'build',
           });
         }
