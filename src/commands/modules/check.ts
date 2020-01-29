@@ -1,16 +1,13 @@
 import { flags } from '@oclif/command';
 import { performance } from 'perf_hooks';
+import * as fs from 'fs';
 
 import Command from '../../base';
 
-import launchPuppeteer from '../../utils/puppeteer/launch';
-import closePuppeteer from '../../utils/puppeteer/close';
 import graphqlClient from '../../utils/graphql/client';
 import waitAlive from '../../utils/waitAlive';
-import openJahia from '../../utils/openJahia';
-import navPage from '../../utils/navPage';
 
-import getModule from '../../components/modules/utils/get-module';
+import getModules from '../../components/modules/utils/get-modules';
 
 import { exit } from '@oclif/errors';
 
@@ -36,25 +33,24 @@ export default class ModulesCheck extends Command {
 
     const gClient = await graphqlClient(flags);
     await waitAlive(gClient, 500000); // Wait for 500s by default
-    const browser = await launchPuppeteer(!flags.debug);
-    const jahiaPage = await openJahia(browser, flags);
 
-    await navPage(
-      jahiaPage,
-      flags.jahiaAdminUrl +
-        '/cms/adminframe/default/en/settings.manageModules.html',
+    const installedModules = await getModules(
+      flags.jahiaAdminUrl,
+      flags.jahiaAdminUsername,
+      flags.jahiaAdminUsername,
     );
-
-    const installedModule = await getModule(jahiaPage, flags.id);
-
-    await jahiaPage.close();
-    await closePuppeteer(browser);
-
-    console.log(installedModule);
+    const reqModule = installedModules.find(m => m.id === flags.id);
+    if (reqModule === undefined) {
+      console.log('Module is NOT installed');
+    }
 
     const t1 = performance.now();
     console.log(
       'Total Exceution time: ' + Math.round(t1 - t0) + ' milliseconds.',
     );
+    this.log(JSON.stringify(reqModule));
+    if (flags.output !== undefined) {
+      fs.writeFileSync(flags.output, JSON.stringify(reqModule));
+    }
   }
 }
