@@ -23,6 +23,10 @@ export default class GetImgName extends Command {
       required: true,
       description: 'Specify the directory to generate the manifest file into',
     }),
+    build: flags.boolean({
+      char: 'b',
+      description: 'Forces build of new images',
+    }),    
   };
 
   static args = [{ name: 'file' }];
@@ -30,7 +34,7 @@ export default class GetImgName extends Command {
   async run() {
     const { flags } = this.parse(GetImgName);
     const t0 = performance.now();
-
+    console.log(flags.build)
     if (flags.manifest === undefined) {
       console.log('ERROR: Please specify a manifest file');
       exit();
@@ -69,19 +73,19 @@ export default class GetImgName extends Command {
       const images = [];
       for (const dockerImage of manifestContent.docker.images) {
         const searchTag = dockerImage.prefix + '-' + manifestId;
-        if (repoTags.includes(searchTag)) {
-          images.push({
-            ...dockerImage,
-            destination: manifestContent.docker.repository + ':' + searchTag,
-            commit: null,
-            action: 'run',
-          });
-        } else {
+        if (flags.build === true || repoTags.includes(searchTag) === false) {
           images.push({
             ...dockerImage,
             destination: dockerImage.source,
             commit: manifestContent.docker.repository + ':' + searchTag,
             action: 'build',
+          });
+        } else {
+          images.push({
+            ...dockerImage,
+            destination: manifestContent.docker.repository + ':' + searchTag,
+            commit: null,
+            action: 'run',
           });
         }
       }
