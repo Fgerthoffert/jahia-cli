@@ -12,7 +12,7 @@ import navPage from '../../utils/navPage';
 
 import { sleep } from '../../utils'
 
-export default class AugsearchStartindex extends Command {
+export default class SearchStartindex extends Command {
   static description = 'Trigger the indexing job once the site has been imported';
 
   static flags = {
@@ -23,7 +23,7 @@ export default class AugsearchStartindex extends Command {
   static args = [{ name: 'file' }];
 
   async run() {
-    const { flags } = this.parse(AugsearchStartindex);
+    const { flags } = this.parse(SearchStartindex);
     const t0 = performance.now();
 
     const gClient = await graphqlClient(flags);
@@ -41,10 +41,10 @@ export default class AugsearchStartindex extends Command {
     const saveButton = await jahiaPage.$('button[name="_eventId_save"]');
     await Promise.all([jahiaPage.waitForNavigation(), saveButton.click()]);
 
-    await sleep(2000);
-
+    await sleep(1000);
     const indexButton = await jahiaPage.$('button[name="_eventId_reindex"]');
     await Promise.all([jahiaPage.waitForNavigation(), indexButton.click()]);
+    await sleep(500);
 
     await jahiaPage.close();
     await closePuppeteer(browser);
