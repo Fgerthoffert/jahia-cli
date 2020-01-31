@@ -1,4 +1,6 @@
 import { flags } from '@oclif/command';
+import cli from 'cli-ux';
+
 import { performance } from 'perf_hooks';
 import * as loadYamlFile from 'load-yaml-file';
 import * as fs from 'fs';
@@ -52,10 +54,11 @@ export default class ManifestRun extends Command {
 		if (manifestContent.jobs !== undefined && manifestContent.jobs.length > 0) {
 			const gClient = await graphqlClient(flags);
 			await waitAlive(gClient, 500000); // Wait for 500s by default
-
 			let browser = null;
 			let jahiaPage = null;
 			for (const job of manifestContent.jobs) {
+				cli.action.start('Starting a job of type: ' + job.type);
+				const t1 = performance.now();
 				if ([ 'webproject', 'groovy' ].includes(job.type)) {
 					if (browser === null) {
 						// eslint-disable-next-line no-await-in-loop
@@ -119,10 +122,15 @@ export default class ManifestRun extends Command {
 					console.log('ERROR: Unsupported job type');
 					exit();
 				}
+				cli.action.stop(' done (' + Math.round(performance.now() - t1) + ' ms)');
 			}
 
-			await jahiaPage.close();
-			await closePuppeteer(browser);
+			if (jahiaPage !== null) {
+				await jahiaPage.close();
+			}
+			if (browser !== null) {
+				await closePuppeteer(browser);
+			}			
 		} else {
 			console.log('Manifest is empty and does not contain any jobs');
 		}

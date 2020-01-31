@@ -89,7 +89,7 @@ export default class ManifestCreate extends Command {
 				},
 				{
 					type: 'shell',
-					command: 'node -v'
+					cmd: 'node -v'
 				}
 			],
 			// List source docker images that would be used in the absence of corresponding images
