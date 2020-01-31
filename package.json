@@ -88,7 +88,10 @@
       },
       "webprojects": {
         "description": "Operation on Jahia Web Projects"
-      }
+      },
+      "search": {
+        "description": "Commands specific to the augmented search project (TO BE REMOVED)"
+      }            
     }
   },
   "repository": "jahia/jahia-cli",
