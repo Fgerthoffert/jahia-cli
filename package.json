@@ -29,7 +29,6 @@
     "btoa": "^1.2.1",
     "cli-ux": "^5.4.2",
     "download": "^7.1.0",
-    "fetch-node": "^0.0.1",
     "form-data": "^3.0.0",
     "gql": "^1.1.2",
     "graphql": "^14.5.8",
@@ -91,7 +90,7 @@
       },
       "search": {
         "description": "Commands specific to the augmented search project (TO BE REMOVED)"
-      }            
+      }
     }
   },
   "repository": "jahia/jahia-cli",
