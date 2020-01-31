@@ -89,7 +89,7 @@
       "webprojects": {
         "description": "Operation on Jahia Web Projects"
       },
-      "augsearch": {
+      "search": {
         "description": "Commands specific to the augmented search project (TO BE REMOVED)"
       }            
     }
