@@ -10,7 +10,7 @@ const isIndexed = (data: any, hits: number) => {
   if (data.data && data.data.jcr && data.data.jcr.searches && data.data.jcr.searches.search && data.data.jcr.searches.search.totalHits) {
     const queryHits = data.data.jcr.searches.search.totalHits;
     console.log('The search query returned ' + queryHits + ' hits');  
-    if (data.data.jcr.searches.search.totalHits >= hits) {
+    if (Number.parseInt(queryHits, 10) >= hits) {
       return true;
     }
   }
