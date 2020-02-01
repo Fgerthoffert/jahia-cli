@@ -7,16 +7,14 @@ import { sleep } from '../../../utils';
 import gqlQuery from './gql';
 
 const isIndexed = (data: any, hits: number) => {
-  if (data.data === undefined || data.data.jcr === undefined) {
-    return false;
+  if (data.data && data.data.jcr && data.data.jcr.searches && data.data.jcr.searches.search && data.data.jcr.searches.search.totalHits) {
+    const queryHits = data.data.jcr.searches.search.totalHits;
+    console.log('The search query returned ' + queryHits + ' hits');  
+    if (Number.parseInt(queryHits, 10) >= hits) {
+      return true;
+    }
   }
-  if (data.data.jcr.searches.search.totalHits > 0) {
-    console.log('The search query returned ' + data.data.jcr.searches.search.totalHits + ' hits');  
-  }
-  if (data.data.jcr.searches.search.totalHits < hits) {
-    return false;
-  }
-  return true;
+  return false;
 };
 
 /* eslint max-params: ["error", 7] */
