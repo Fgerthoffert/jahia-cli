@@ -33,7 +33,7 @@ const installModule = async (
     console.log(error);
   }
   if (installResponse.data !== undefined) {
-    console.log(installResponse.data.bundleInfos);
+    console.log('Submission response: ', installResponse.data.bundleInfos);
     return installResponse.data.bundleInfos;
   }
   return false;

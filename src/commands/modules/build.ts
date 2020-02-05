@@ -7,6 +7,7 @@ import Command from '../../base';
 import { exit } from '@oclif/errors';
 
 import buildModule from '../../components/modules/build';
+import installModule from '../../components/modules/install';
 
 export default class ModulesBuild extends Command {
   static description = 'Installs a module';
@@ -38,10 +39,10 @@ export default class ModulesBuild extends Command {
       default: 'master',
       description: 'Git repository branch',
     }),
-    filpath: flags.string({
-      required: true,
-      default: '/tmp/abcldap-4.0.0-SNAPSHOT.jar',
-      description: 'Filename of the artifact built',
+    deploy: flags.string({
+      required: false,
+      default: 'true',
+      description: 'Trigger a deployment of the module',
     }),
   };
 
@@ -56,13 +57,19 @@ export default class ModulesBuild extends Command {
       exit();
     }
 
-    await buildModule(
+    const buildModules = await buildModule(
       flags.directory,
       flags.id,
       flags.branch,
       flags.repository,
-      flags.filpath,
     );
+
+    if (JSON.parse(flags.deploy)) {
+      for (const jahiaModule of buildModules) {
+        // eslint-disable-next-line no-await-in-loop
+        await installModule(flags, jahiaModule);
+      }
+    }
 
     const t1 = performance.now();
     console.log(

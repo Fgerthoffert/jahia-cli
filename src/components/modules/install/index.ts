@@ -10,35 +10,48 @@ import installMod from '../utils/install-module';
 const installModule = async (
   flags: ConfigFlags,
   moduleFilepath: string,
-  moduleId: string,
+  moduleId?: string | undefined,
   moduleVersion?: string | undefined,
 ) => {
-  const installedModules = await getModules(
-    flags.jahiaAdminUrl,
-    flags.jahiaAdminUsername,
-    flags.jahiaAdminUsername,
-  );
-  if (isInstalled(installedModules, moduleId, moduleVersion) === false) {
-    console.log('Module needs to be installed');
+  // ModuleId is undefined, we blindly push the module but don't check for proper installation
+  if (moduleId === undefined) {
+    console.log('Submitting: ' + moduleFilepath + ' for installation');
     await installMod(
       flags.jahiaAdminUrl,
       flags.jahiaAdminUsername,
       flags.jahiaAdminUsername,
       moduleFilepath,
     );
-    const checkInstalledModules = await getModules(
+  } else {
+    const installedModules = await getModules(
       flags.jahiaAdminUrl,
       flags.jahiaAdminUsername,
       flags.jahiaAdminUsername,
     );
-    if (isInstalled(checkInstalledModules, moduleId, moduleVersion) === true) {
-      console.log('Installation of the module successful');
+    if (isInstalled(installedModules, moduleId, moduleVersion) === false) {
+      console.log('Module needs to be installed');
+      await installMod(
+        flags.jahiaAdminUrl,
+        flags.jahiaAdminUsername,
+        flags.jahiaAdminUsername,
+        moduleFilepath,
+      );
+      const checkInstalledModules = await getModules(
+        flags.jahiaAdminUrl,
+        flags.jahiaAdminUsername,
+        flags.jahiaAdminUsername,
+      );
+      if (
+        isInstalled(checkInstalledModules, moduleId, moduleVersion) === true
+      ) {
+        console.log('Installation of the module successful');
+      } else {
+        console.log('Error: Unable to install module');
+        exit();
+      }
     } else {
-      console.log('Error: Unable to install module');
-      exit();
+      console.log('Module already installed');
     }
-  } else {
-    console.log('Module already installed');
   }
 };
 
