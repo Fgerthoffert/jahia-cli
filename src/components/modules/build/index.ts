@@ -59,8 +59,14 @@ const buildModule = async (
 
   console.log('Git checkout branch and pull');
   // Checkout branch and pull
-  await git.checkout(branch);
-  await git.pull();
+  try {
+    await git.checkout(branch);
+    await git.pull();
+  } catch (error) {
+    console.log(error);
+    console.log('Unable to access branch: ' + branch + ' on ' + repository);
+    exit();
+  }
 
   console.log('Displaying Git Status');
   status = await git.status();

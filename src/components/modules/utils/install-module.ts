@@ -2,6 +2,8 @@ import axios from 'axios';
 import * as FormData from 'form-data';
 import * as fs from 'fs';
 
+import { exit } from '@oclif/errors';
+
 // https://www.npmjs.com/package/form-data
 const installModule = async (
   url: string,
@@ -31,6 +33,8 @@ const installModule = async (
     });
   } catch (error) {
     console.log(error);
+    console.log('Error uploading file: ' + file);
+    exit();
   }
   if (installResponse.data !== undefined) {
     console.log('Submission response: ', installResponse.data.bundleInfos);
