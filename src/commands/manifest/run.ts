@@ -80,7 +80,6 @@ export default class ManifestRun extends Command {
             job.branch,
             job.repository,
           );
-          console.log(builtModules);
           if (job.deploy === true) {
             // eslint-disable-next-line max-depth
             for (const jahiaModule of builtModules) {
