@@ -74,13 +74,20 @@ export default class ManifestRun extends Command {
           await assetsFetch(job);
         } else if (job.type === 'build') {
           // eslint-disable-next-line no-await-in-loop
-          await buildModule(
+          const builtModules = await buildModule(
             job.directory,
             job.id,
             job.branch,
             job.repository,
-            job.filepath,
           );
+          console.log(builtModules);
+          if (job.deploy === true) {
+            // eslint-disable-next-line max-depth
+            for (const jahiaModule of builtModules) {
+              // eslint-disable-next-line no-await-in-loop
+              await installModule(flags, jahiaModule);
+            }
+          }
         } else if (job.type === 'module') {
           // eslint-disable-next-line no-await-in-loop
           await installModule(flags, job.filepath, job.id);

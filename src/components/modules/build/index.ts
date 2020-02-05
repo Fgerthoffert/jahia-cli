@@ -6,13 +6,29 @@ import * as simpleGit from 'simple-git/promise';
 import * as mvn from 'maven';
 import * as xmljs from 'xml2js';
 
+// https://gist.github.com/qwtel/fd82ab097cbe1db50ded9505f183ccb8
+const getFiles = async (dir: string, searchStr: string) => {
+  let allEntries: Array<string> = [];
+  const dirContent = await fs.readdirSync(dir, { withFileTypes: true });
+  for (const dirEntry of dirContent) {
+    const filepath = path.resolve(dir, dirEntry.name);
+    if (dirEntry.isDirectory()) {
+      // eslint-disable-next-line no-await-in-loop
+      const newScan: Array<string> = await getFiles(filepath, searchStr);
+      allEntries = [...allEntries, ...newScan];
+    } else if (filepath.includes(searchStr)) {
+      allEntries.push(filepath);
+    }
+  }
+  return allEntries;
+};
+
 /* eslint max-params: ["error", 5] */
 const buildModule = async (
   directory: string,
   id: string,
   branch: string,
   repository: string,
-  filpath: string,
 ) => {
   const dstDir = path.join(directory, id);
 
@@ -60,6 +76,26 @@ const buildModule = async (
   const pomStr = fs.readFileSync(pomXml);
   const pomObj = await xmljs.parseStringPromise(pomStr);
 
+  // Some modules reference a set of submodules being built and that need to be imported into Jahia as well.
+  console.log(pomObj);
+  let profiles = [];
+  if (
+    pomObj.project.profiles !== undefined &&
+    pomObj.project.profiles[0] !== undefined &&
+    pomObj.project.profiles[0].profile
+  ) {
+    const defaultProfile = pomObj.project.profiles[0].profile.find((p: any) =>
+      p.id.includes('default'),
+    );
+    if (
+      defaultProfile !== undefined &&
+      defaultProfile.modules[0] !== undefined &&
+      defaultProfile.modules[0].module !== undefined
+    ) {
+      profiles = defaultProfile.modules[0].module;
+    }
+  }
+
   let moduleVersion = null;
   if (
     pomObj.project === undefined ||
@@ -72,20 +108,6 @@ const buildModule = async (
     moduleVersion = pomObj.project.version[0];
   }
 
-  let artifactId = null;
-  if (
-    pomObj.project === undefined ||
-    pomObj.project.artifactId === undefined ||
-    pomObj.project.artifactId[0] === undefined
-  ) {
-    console.log(
-      'ERROR: Unable to detect module artifact id from the pom.xml file',
-    );
-    exit();
-  } else {
-    artifactId = pomObj.project.artifactId[0];
-  }
-
   // eslint-disable-next-line noImplicitAnyForClassMembers
   const mvnProject = mvn.create({ cwd: dstDir });
   //  console.log(mvnProject);
@@ -96,25 +118,11 @@ const buildModule = async (
   });
   console.log('Build done');
 
-  const artifactSrc = path.join(
-    dstDir,
-    'target/',
-    artifactId + '-' + moduleVersion + '.jar',
-  );
+  // We blindly look for generated jar files
+  const jarFiles = await getFiles(dstDir, moduleVersion + '.jar');
 
-  if (!fs.existsSync(artifactSrc)) {
-    console.log(
-      'ERROR: Unable to detect the built artifact in the filesystem: ' +
-        artifactSrc,
-    );
-    exit();
-  }
-
-  const artifactDst = path.join(filpath);
-  console.log(
-    'Copying artifact file from: ' + artifactSrc + ' to ' + artifactDst,
-  );
-  fs.copyFileSync(artifactSrc, artifactDst);
+  console.log(jarFiles);
+  return jarFiles;
 };
 
 export default buildModule;

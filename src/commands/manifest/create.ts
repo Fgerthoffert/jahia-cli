@@ -40,7 +40,7 @@ export default class ManifestCreate extends Command {
           branch: 'master',
           directory: '/tmp/',
           id: 'ldap',
-          filepath: '/tmp/abcldap-4.0.0-SNAPSHOT.jar',
+          deploy: true,
         },
         {
           type: 'asset',
