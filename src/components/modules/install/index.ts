@@ -10,9 +10,9 @@ import installMod from '../utils/install-module';
 const installModule = async (
 	flags: ConfigFlags,
 	moduleFilepath: string,
+	force: boolean,
 	moduleId?: string | undefined,
-	moduleVersion?: string | undefined,
-	force?: boolean | undefined
+	moduleVersion?: string | undefined
 ) => {
 	// ModuleId is undefined, we blindly push the module but don't check for proper installation
 	if (moduleId === undefined) {

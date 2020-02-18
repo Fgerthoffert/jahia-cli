@@ -52,7 +52,7 @@ export default class ModulesInstall extends Command {
 		const gClient = await graphqlClient(flags);
 		await waitAlive(gClient, 500000); // Wait for 500s by default
 
-		await installModule(flags, flags.file, flags.id, flags.force);
+		await installModule(flags, flags.file, flags.force, flags.id);
 
 		const t1 = performance.now();
 		console.log('Total Exceution time: ' + Math.round(t1 - t0) + ' milliseconds.');
