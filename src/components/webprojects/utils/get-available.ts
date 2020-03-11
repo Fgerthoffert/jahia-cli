@@ -1,3 +1,5 @@
+import getSiteKey from './get-site-key';
+
 const getAvailable = async (page: any) => {
   console.log('Obtaining list of available prepackaged Webprojects');
 
@@ -9,8 +11,12 @@ const getAvailable = async (page: any) => {
     ].map(element => element.getAttribute('value')),
   );
   const availableWebprojects = allFields.map((p: any) => {
+    const sitekey =
+      p.match(/#([\s\S]*)$/) === null
+        ? getSiteKey(p)
+        : p.match(/#([\s\S]*)$/)[1];
     return {
-      sitekey: p.match(/#([\s\S]*)$/)[1],
+      sitekey: sitekey,
       value: p,
     };
   });
