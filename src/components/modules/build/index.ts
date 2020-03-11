@@ -84,23 +84,23 @@ const buildModule = async (
 
   // Some modules reference a set of submodules being built and that need to be imported into Jahia as well.
   console.log(pomObj);
-  let profiles = [];
-  if (
-    pomObj.project.profiles !== undefined &&
-    pomObj.project.profiles[0] !== undefined &&
-    pomObj.project.profiles[0].profile
-  ) {
-    const defaultProfile = pomObj.project.profiles[0].profile.find((p: any) =>
-      p.id.includes('default'),
-    );
-    if (
-      defaultProfile !== undefined &&
-      defaultProfile.modules[0] !== undefined &&
-      defaultProfile.modules[0].module !== undefined
-    ) {
-      profiles = defaultProfile.modules[0].module;
-    }
-  }
+  // let profiles = [];
+  // if (
+  //   pomObj.project.profiles !== undefined &&
+  //   pomObj.project.profiles[0] !== undefined &&
+  //   pomObj.project.profiles[0].profile
+  // ) {
+  //   const defaultProfile = pomObj.project.profiles[0].profile.find((p: any) =>
+  //     p.id.includes('default'),
+  //   );
+  //   if (
+  //     defaultProfile !== undefined &&
+  //     defaultProfile.modules[0] !== undefined &&
+  //     defaultProfile.modules[0].module !== undefined
+  //   ) {
+  //     profiles = defaultProfile.modules[0].module;
+  //   }
+  // }
 
   let moduleVersion = null;
   if (
