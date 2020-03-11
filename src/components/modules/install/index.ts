@@ -32,7 +32,6 @@ const installModule = async (
 				flags.jahiaAdminUsername,
 				flags.jahiaAdminUsername
 			);
-			console.log(checkInstalledModules);
 			if (isInstalled(checkInstalledModules, moduleId, moduleVersion) === true) {
 				console.log('Installation of the module successful');
 			} else {
