@@ -6,7 +6,7 @@
   "bin": {
     "jahia-cli": "./bin/run"
   },
-  "bugs": "https://github.com/jahia/jahia-cli/issues",
+  "bugs": "https://github.com/fgerthoffert/jahia-cli/issues",
   "dependencies": {
     "@oclif/command": "^1",
     "@oclif/config": "^1",
@@ -69,7 +69,7 @@
     "/npm-shrinkwrap.json",
     "/oclif.manifest.json"
   ],
-  "homepage": "https://github.com/jahia/jahia-cli",
+  "homepage": "https://github.com/fgerthoffert/jahia-cli",
   "keywords": [
     "oclif"
   ],
