@@ -29,6 +29,12 @@ const importFileWebproject = async (
     );
     await Promise.all([page.waitForNavigation(), button.click()]);
 
+    const errorDetails = await page.$('#siteSettings > div:nth-child(1) > div.container-fluid > div > div > div.row > div > form > div > div > a');
+    if (errorDetails !== null) {
+      console.log('ERROR: The project cannot be installed due to a missing dependency (likely a missing module)');    
+      exit();  
+    }
+    
     const importSite = await page.$('button[name="_eventId_processImport"]');
     await Promise.all([
       page.waitForNavigation({ timeout: 600000 }),
