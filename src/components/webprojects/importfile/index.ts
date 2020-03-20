@@ -4,10 +4,6 @@ import { performance } from 'perf_hooks';
 import getWebprojects from '../utils/get-webprojects';
 import { exit } from '@oclif/errors';
 
-const sleep = (ms: number) => {
-  return new Promise(resolve => setTimeout(resolve, ms));
-};
-
 const importFileWebproject = async (
   page: any,
   sitekey: string,
