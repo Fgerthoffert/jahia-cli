@@ -29,12 +29,35 @@ const importFileWebproject = async (
     );
     await Promise.all([page.waitForNavigation(), button.click()]);
 
-    const errorDetails = await page.$('#siteSettings > div:nth-child(1) > div.container-fluid > div > div > div.row > div > form > div > div > a');
+    const errorDetails = await page.$(
+      '#siteSettings > div:nth-child(1) > div.container-fluid > div > div > div.row > div > form > div > div > a',
+    );
     if (errorDetails !== null) {
-      console.log('ERROR: The project cannot be installed due to a missing dependency (likely a missing module)');    
-      exit();  
+      console.log(
+        'ERROR: The project cannot be installed due to a missing dependency (likely a missing module)',
+      );
+      const errorMsg = await page.evaluate(() => {
+        const selector = document.querySelector("div[class*='alert-danger']");
+        if (selector !== null && selector.textContent !== null) {
+          return selector.textContent.trim().replace(/\s\s+/g, ' ');
+        }
+        return '';
+      });
+      console.log('ERROR: ' + errorMsg);
+
+      const errorContent = await page.evaluate(() => {
+        const selector = document.querySelector("div[id*='validationErrors'");
+        if (selector !== null && selector.textContent !== null) {
+          return selector.textContent.trim().replace(/\s\s+/g, ' ');
+        }
+        return '';
+      });
+      console.log('ERROR: ' + errorContent);
+      //      console.log(validationError);
+      //      console.log(text);
+      exit();
     }
-    
+
     const importSite = await page.$('button[name="_eventId_processImport"]');
     await Promise.all([
       page.waitForNavigation({ timeout: 600000 }),
