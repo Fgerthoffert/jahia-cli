@@ -55,6 +55,11 @@ export default class ManifestCreate extends Command {
           filepath: '/tmp/popperjs-1.16.0.jar',
         },
         {
+          type: 'modulesite',
+          siteId: 'digitall',
+          moduleId: 'popperjs',
+        },
+        {
           type: 'asset',
           fetch: 'http',
           source:
