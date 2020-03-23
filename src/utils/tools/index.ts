@@ -6,11 +6,8 @@ export const submitGroovy = async (
   username: string,
   password: string,
   url: string,
-  groovyFile: string,
+  encodedScript: string,
 ) => {
-  const groovyScript = fs.readFileSync(groovyFile);
-  const encodedScript = encodeURIComponent(groovyScript.toString());
-
   const response = await fetch(url, {
     credentials: 'include',
     headers: {
@@ -35,4 +32,22 @@ export const submitGroovy = async (
     return false;
   }
   return false;
+};
+
+export const submitGroovyFile = async (
+  username: string,
+  password: string,
+  url: string,
+  groovyFile: string,
+) => {
+  const groovyScript = fs.readFileSync(groovyFile);
+  const encodedScript = encodeURIComponent(groovyScript.toString());
+
+  const groovyResponse = await submitGroovy(
+    username,
+    password,
+    url,
+    encodedScript,
+  );
+  return groovyResponse;
 };

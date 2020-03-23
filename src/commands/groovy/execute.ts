@@ -4,7 +4,7 @@ import * as fs from 'fs';
 
 import Command from '../../base';
 
-import { submitGroovy } from '../../utils/tools';
+import { submitGroovyFile } from '../../utils/tools';
 
 import { exit } from '@oclif/errors';
 
@@ -40,7 +40,7 @@ export default class GroovyExecute extends Command {
       exit();
     }
 
-    const submitForm = await submitGroovy(
+    const submitForm = await submitGroovyFile(
       flags.jahiaToolsUsername,
       flags.jahiaToolsPassword,
       flags.jahiaAdminUrl + '/modules/tools/groovyConsole.jsp?',
