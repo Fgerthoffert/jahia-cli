@@ -16,11 +16,42 @@ Command Line Interface to Jahia Administration panel
 [![Downloads/week](https://img.shields.io/npm/dw/jahia-cli.svg)](https://npmjs.org/package/jahia-cli)
 [![License](https://img.shields.io/npm/l/jahia-cli.svg)](https://github.com/jahia/jahia-cli/blob/master/package.json)
 
+_This readme is being updated automatically during NPM publish, please look at the [NPM Page](https://www.npmjs.com/package/jahia-cli) for a full list of available commands._
+
 <!-- toc -->
 
+- [Introduction](#introduction)
+- [Manifest](#manifest)
 - [Usage](#usage)
 - [Commands](#commands)
   <!-- tocstop -->
+
+# Introduction
+
+This tool provides an interface to automated the execution of certain tasks on a running Jahia instance. It can execute individual commands or receive a manifest detailing a list of commands to be executed in batch (sequentially).
+
+It covers the following primary use cases:
+
+- Operations on modules (build from Git, install, enable, disable)
+- Operations on web projects (check status, import, install)
+- Download an asset
+- Execution of groovy scripts
+- Execution of shell commands
+- Wait for Jahia to be alive
+- Misc utilities (docker, search, ...)
+
+# Manifest
+
+The primary objective of the manifest is to be able to declare, in a dedicated YML file, a set of actions to be executed sequentially, for example:
+
+- Wait for Jahia to be up and runnning
+- Download a module
+- Install the module
+- Configure it with Groovy
+- Install a site
+- Enable the module on the installed site
+
+You can generate a blank manifest by running the command `jahia-cli manifest:create`
 
 # Usage
 
@@ -44,61 +75,6 @@ USAGE
 
 <!-- commands -->
 
-- [`jahia-cli hello [FILE]`](#jahia-cli-hello-file)
-- [`jahia-cli help [COMMAND]`](#jahia-cli-help-command)
-- [`jahia-cli module [FILE]`](#jahia-cli-module-file)
-
-## `jahia-cli hello [FILE]`
-
-describe the command here
-
-```
-USAGE
-  $ jahia-cli hello [FILE]
-
-OPTIONS
-  -f, --force
-  -h, --help       show CLI help
-  -n, --name=name  name to print
-
-EXAMPLE
-  $ jahia-cli hello
-  hello world from ./src/hello.ts!
-```
-
-_See code: [src/commands/hello.ts](https://github.com/jahia/jahia-cli/blob/v0.0.1/src/commands/hello.ts)_
-
-## `jahia-cli help [COMMAND]`
-
-display help for jahia-cli
-
-```
-USAGE
-  $ jahia-cli help [COMMAND]
-
-ARGUMENTS
-  COMMAND  command to show help for
-
-OPTIONS
-  --all  see all commands in CLI
-```
-
-_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v2.2.3/src/commands/help.ts)_
-
-## `jahia-cli module [FILE]`
-
-describe the command here
-
-```
-USAGE
-  $ jahia-cli module [FILE]
-
-OPTIONS
-  -f, --force
-  -h, --help       show CLI help
-  -n, --name=name  name to print
-```
-
-_See code: [src/commands/module.ts](https://github.com/jahia/jahia-cli/blob/v0.0.1/src/commands/module.ts)_
+This readme is being updated automatically during NPM publish, please look at the [NPM Page](https://www.npmjs.com/package/jahia-cli) for a full list of available commands.
 
 <!-- commandsstop -->
