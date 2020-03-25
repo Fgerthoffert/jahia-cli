@@ -56,6 +56,7 @@ export default class ManifestCreate extends Command {
         },
         {
           type: 'modulesite',
+          action: 'enable',
           siteId: 'digitall',
           moduleId: 'popperjs',
         },
