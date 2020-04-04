@@ -28,7 +28,7 @@ _This readme is being updated automatically during NPM publish, please look at t
 
 # Introduction
 
-This tool provides an interface to automated the execution of certain tasks on a running Jahia instance. It can execute individual commands or receive a manifest detailing a list of commands to be executed in batch (sequentially).
+This tool provides an interface to automate the execution of certain tasks on a running Jahia instance. It can execute individual commands or receive a manifest detailing a list of commands to be executed in batch (sequentially).
 
 It covers the following primary use cases:
 
