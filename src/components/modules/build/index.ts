@@ -28,6 +28,7 @@ const buildModule = async (
   directory: string,
   id: string,
   branch: string,
+  gitPath: string | null,
   repository: string,
 ) => {
   const dstDir = path.join(directory, id);
@@ -36,9 +37,7 @@ const buildModule = async (
     console.log('WARNING: Repository directory already exists: ' + dstDir);
   } else {
     console.log('Cloning git repository to: ' + dstDir);
-    await simpleGit()
-      .silent(true)
-      .clone(repository, dstDir);
+    await simpleGit().silent(true).clone(repository, dstDir);
   }
 
   const git = simpleGit(dstDir);
@@ -72,7 +71,10 @@ const buildModule = async (
   status = await git.status();
   console.log(status);
 
-  const pomXml = path.join(dstDir, 'pom.xml');
+  const pomXml =
+    gitPath === null
+      ? path.join(dstDir, 'pom.xml')
+      : path.join(dstDir, gitPath, 'pom.xml');
   if (!fs.existsSync(pomXml)) {
     console.log('ERROR: Unable to locate pom.xml');
     exit();
@@ -114,8 +116,9 @@ const buildModule = async (
     moduleVersion = pomObj.project.version[0];
   }
 
+  const mvnDir = gitPath === null ? dstDir : path.join(dstDir, gitPath);
   // eslint-disable-next-line noImplicitAnyForClassMembers
-  const mvnProject = mvn.create({ cwd: dstDir });
+  const mvnProject = mvn.create({ cwd: mvnDir });
   //  console.log(mvnProject);
   console.log('Starting build');
   await mvnProject.execute(['clean', 'install'], {
@@ -125,7 +128,7 @@ const buildModule = async (
   console.log('Build done');
 
   // We blindly look for generated jar files
-  const jarFiles = await getFiles(dstDir, moduleVersion + '.jar');
+  const jarFiles = await getFiles(mvnDir, moduleVersion + '.jar');
 
   console.log(jarFiles);
   return jarFiles;

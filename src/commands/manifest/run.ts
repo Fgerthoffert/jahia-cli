@@ -78,11 +78,13 @@ export default class ManifestRun extends Command {
           // eslint-disable-next-line no-await-in-loop
           await assetsFetch(job);
         } else if (job.type === 'build') {
+          const gitPath = job.gitPath === undefined ? null : job.gitPath;
           // eslint-disable-next-line no-await-in-loop
           const builtModules = await buildModule(
             job.directory,
             job.id,
             job.branch,
+            gitPath,
             job.repository,
           );
           if (job.deploy === true) {
