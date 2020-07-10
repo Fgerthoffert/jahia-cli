@@ -72,7 +72,7 @@ const buildModule = async (
   console.log(status);
 
   const pomXml =
-    gitPath === null
+    gitPath === null || gitPath === ''
       ? path.join(dstDir, 'pom.xml')
       : path.join(dstDir, gitPath, 'pom.xml');
   if (!fs.existsSync(pomXml)) {
