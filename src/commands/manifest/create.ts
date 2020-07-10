@@ -43,6 +43,15 @@ export default class ManifestCreate extends Command {
           deploy: true,
         },
         {
+          type: 'build',
+          repository: 'git@github.com:Jahia/LDAP-provider.git',
+          branch: 'master',
+          gitPath: 'some-subfolder/where/pom/is/located',
+          directory: '/tmp/',
+          id: 'ldap',
+          deploy: true,
+        },
+        {
           type: 'asset',
           fetch: 'http',
           source:
