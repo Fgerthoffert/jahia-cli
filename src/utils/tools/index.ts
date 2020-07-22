@@ -7,19 +7,37 @@ export const submitGroovy = async (
   password: string,
   url: string,
   encodedScript: string,
+  jsessionid: string | null,
+  // eslint-disable-next-line max-params
 ) => {
-  const response = await fetch(url, {
-    credentials: 'include',
-    headers: {
-      authorization: 'Basic ' + base64.encode(username + ':' + password),
-      'content-type': 'application/x-www-form-urlencoded',
-    },
-    body: 'toolAccessToken=&runScript=true&script=' + encodedScript,
-    method: 'POST',
-    mode: 'cors',
-  });
+  let response: any = {};
+  if (jsessionid === null) {
+    response = await fetch(url, {
+      credentials: 'include',
+      headers: {
+        authorization: 'Basic ' + base64.encode(username + ':' + password),
+        'content-type': 'application/x-www-form-urlencoded',
+      },
+      body: 'toolAccessToken=&runScript=true&script=' + encodedScript,
+      method: 'POST',
+      mode: 'cors',
+    });
+  } else {
+    console.log('Executing call manually');
+    response = await fetch(url, {
+      credentials: 'include',
+      headers: {
+        Cookie: 'JSESSIONID=' + jsessionid,
+        'content-type': 'application/x-www-form-urlencoded',
+      },
+      body: 'toolAccessToken=&runScript=true&script=' + encodedScript,
+      method: 'POST',
+      mode: 'cors',
+    });
+  }
+
   const data = await response.text();
-  //  console.log(data);
+  // console.log(data);
   const failRegexp = new RegExp(/<legend style="color: red">Error<\/legend>/);
   const successRegexp = new RegExp(
     /<legend style="color: blue">Successfully executed in/,
@@ -39,6 +57,8 @@ export const submitGroovyFile = async (
   password: string,
   url: string,
   groovyFile: string,
+  jsessionid: string | null,
+  // eslint-disable-next-line max-params
 ) => {
   const groovyScript = fs.readFileSync(groovyFile);
   const encodedScript = encodeURIComponent(groovyScript.toString());
@@ -48,6 +68,7 @@ export const submitGroovyFile = async (
     password,
     url,
     encodedScript,
+    jsessionid,
   );
   return groovyResponse;
 };
