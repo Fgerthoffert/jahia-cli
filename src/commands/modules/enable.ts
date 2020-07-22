@@ -45,6 +45,7 @@ export default class ModulesEnable extends Command {
       flags.jahiaToolsPassword,
       flags.jahiaAdminUrl + '/modules/tools/groovyConsole.jsp?',
       groovyScript,
+      null,
     );
     if (submitForm === false) {
       console.log(
