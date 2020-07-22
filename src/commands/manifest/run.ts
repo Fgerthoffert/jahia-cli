@@ -126,15 +126,56 @@ export default class ManifestRun extends Command {
             flags.jahiaToolsPassword,
             flags.jahiaAdminUrl + '/modules/tools/groovyConsole.jsp?',
             job.filepath,
+            null,
           );
-          if (submitForm === false) {
-            console.log(
-              'ERROR: Unable execute the groovy script, try running it manually through Jahia Tools: ' +
-                job.filepath,
-            );
-            exit();
-          } else {
+          if (submitForm === true) {
             console.log('Groovy script successfully executed: ' + job.filepath);
+          } else {
+            console.log(
+              'Unable to access tools directly, will be trying to authenticate and fetch the session ID from a cookie',
+            );
+            // eslint-disable-next-line no-await-in-loop
+            const browser = await launchPuppeteer(!flags.debug);
+            // eslint-disable-next-line no-await-in-loop
+            const jahiaPage = await openJahia(browser, flags);
+            // eslint-disable-next-line no-await-in-loop
+            await navPage(
+              jahiaPage,
+              flags.jahiaAdminUrl + '/modules/tools/groovyConsole.jsp?',
+            );
+            // eslint-disable-next-line no-await-in-loop
+            const cookies = await jahiaPage.cookies();
+            const jsession = cookies.find((c: any) => c.name === 'JSESSIONID');
+            // eslint-disable-next-line no-await-in-loop
+            await closePuppeteer(browser);
+
+            if (jsession === undefined) {
+              console.log(
+                'ERROR: Unable to log-in with puppeteer to execute the groovy script (unable to get JSESSIONID)',
+              );
+              exit();
+            } else {
+              console.log('Cookie found: ' + jsession.value);
+              // eslint-disable-next-line no-await-in-loop
+              const submitFormCookie = await submitGroovyFile(
+                flags.jahiaToolsUsername,
+                flags.jahiaToolsPassword,
+                flags.jahiaAdminUrl + '/modules/tools/groovyConsole.jsp?',
+                job.filepath,
+                jsession.value,
+              );
+              // eslint-disable-next-line max-depth
+              if (submitFormCookie === true) {
+                console.log(
+                  'Groovy script successfully executed (via browser auth and cookie): ' +
+                    job.filepath,
+                );
+              } else {
+                console.log(
+                  'Unable to access tools directly, will be trying to authenticate and fetch the session ID from a cookie',
+                );
+              }
+            }
           }
         } else if (job.type === 'modulesite') {
           let groovyScript = enableModule
@@ -151,14 +192,56 @@ export default class ManifestRun extends Command {
             flags.jahiaToolsPassword,
             flags.jahiaAdminUrl + '/modules/tools/groovyConsole.jsp?',
             groovyScript,
+            null,
           );
-          if (groovySubmit === false) {
-            console.log(
-              'ERROR: Unable execute the groovy script, try running it manually through Jahia Tools',
-            );
-            exit();
-          } else {
+          if (groovySubmit === true) {
             console.log('Groovy script successfully executed');
+          } else {
+            console.log(
+              'Unable to access tools directly, will be trying to authenticate and fetch the session ID from a cookie',
+            );
+            // eslint-disable-next-line no-await-in-loop
+            const browser = await launchPuppeteer(!flags.debug);
+            // eslint-disable-next-line no-await-in-loop
+            const jahiaPage = await openJahia(browser, flags);
+            // eslint-disable-next-line no-await-in-loop
+            await navPage(
+              jahiaPage,
+              flags.jahiaAdminUrl + '/modules/tools/groovyConsole.jsp?',
+            );
+            // eslint-disable-next-line no-await-in-loop
+            const cookies = await jahiaPage.cookies();
+            const jsession = cookies.find((c: any) => c.name === 'JSESSIONID');
+            // eslint-disable-next-line no-await-in-loop
+            await closePuppeteer(browser);
+
+            if (jsession === undefined) {
+              console.log(
+                'ERROR: Unable to log-in with puppeteer to execute the groovy script (unable to get JSESSIONID)',
+              );
+              exit();
+            } else {
+              console.log('Cookie found: ' + jsession.value);
+
+              // eslint-disable-next-line no-await-in-loop
+              const submitFormCookie = await submitGroovy(
+                flags.jahiaToolsUsername,
+                flags.jahiaToolsPassword,
+                flags.jahiaAdminUrl + '/modules/tools/groovyConsole.jsp?',
+                groovyScript,
+                jsession.value,
+              );
+              // eslint-disable-next-line max-depth
+              if (submitFormCookie === true) {
+                console.log(
+                  'Groovy script successfully executed (via browser auth and cookie)',
+                );
+              } else {
+                console.log(
+                  'Unable to access tools directly, will be trying to authenticate and fetch the session ID from a cookie',
+                );
+              }
+            }
           }
         } else if (job.type === 'shell') {
           // eslint-disable-next-line no-await-in-loop
