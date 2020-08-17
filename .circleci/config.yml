@@ -232,6 +232,22 @@ workflows:
               only: /^v.*/
             branches:
               ignore: /.*/
+      - docker-build:
+          requires:
+            - npm-publish
+          filters:
+            tags:
+              only: /^v.*/
+            branches:
+              ignore: /.*/
+      - docker-publish:
+          requires:
+            - docker-build
+          filters:
+            tags:
+              only: /^v.*/
+            branches:
+              ignore: /.*/
   lint-and-test:
     jobs:
       - initialize:
