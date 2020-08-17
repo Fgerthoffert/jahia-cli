@@ -201,7 +201,7 @@ jobs:
             echo "$DOCKERHUB_PASSWORD" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
             IMAGE_TAG=${CIRCLE_TAG/v/''}
             echo "Image tag is: $IMAGE_TAG"
-            docker tag $IMAGE_NAME:latest $IMAGE_NAME_API:$IMAGE_TAG
+            docker tag $IMAGE_NAME:latest $IMAGE_NAME:$IMAGE_TAG
             echo "Tagged the image"
             docker push $IMAGE_NAME:latest
             echo "Pushed latest"
