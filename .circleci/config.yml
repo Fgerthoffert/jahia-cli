@@ -174,6 +174,7 @@ jobs:
           name: Build Docker image from Circleci base
           command: |
             ls -lah
+            export PUPPETEER_SKIP_DOWNLOAD=true
             docker build -t $IMAGE_NAME:latest .
       - run:
           name: Archive Docker image
@@ -197,7 +198,7 @@ jobs:
           name: Publish Latest Docker Image to Docker Hub
           command: |
             echo "$DOCKERHUB_USERNAME"
-            echo "$DOCKERHUB_PASS" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
+            echo "$DOCKERHUB_PASSWORD" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
             IMAGE_TAG=${CIRCLE_TAG/v/''}
             echo "Image tag is: $IMAGE_TAG"
             docker tag $IMAGE_NAME:latest $IMAGE_NAME_API:$IMAGE_TAG
