@@ -173,7 +173,7 @@ jobs:
       - run:
           name: Build Docker image from Circleci base
           command: |
-            cd project
+            ls -lah
             docker build -t $IMAGE_NAME:latest .
       - run:
           name: Archive Docker image
