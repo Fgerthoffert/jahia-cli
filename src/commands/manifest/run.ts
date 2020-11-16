@@ -5,6 +5,8 @@ import cli from 'cli-ux';
 import { performance } from 'perf_hooks';
 import * as loadYamlFile from 'load-yaml-file';
 import * as fs from 'fs';
+import * as download from 'download';
+import { v4 as uuidv4 } from 'uuid';
 
 import Command from '../../base';
 
@@ -52,12 +54,19 @@ export default class ManifestRun extends Command {
       console.log('ERROR: Please specify a manifest file');
       exit();
     }
-    if (fs.existsSync(flags.manifest) === false) {
+
+    let manifestfile = flags.manifest;
+    if (["htt", "ftp"].includes(flags.manifest.slice(0,3))) {
+      manifestfile = '/tmp/' + uuidv4() + '.yml'
+      console.log('Processing manifest from URL, saving it to: ' + manifestfile);
+      fs.writeFileSync(manifestfile, await download(flags.manifest));
+    }
+    if (fs.existsSync(manifestfile) === false) {
       console.log('ERROR: Unable to locate manifest file');
       exit();
     }
 
-    const manifestContent = await loadYamlFile(flags.manifest);
+    const manifestContent = await loadYamlFile(manifestfile);
     if (manifestContent.jobs !== undefined && manifestContent.jobs.length > 0) {
       const gClient = await graphqlClient(flags);
       await waitAlive(gClient, 500000); // Wait for 500s by default
