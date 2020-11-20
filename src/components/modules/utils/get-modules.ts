@@ -16,7 +16,7 @@ const getModules = async (url: string, username: string, password: string) => {
 		for (const [ key, value ] of instanceModulesArr) {
 			const ex = regExp.exec(key);
 			if (ex !== null) {
-				modules.push({ ...value, id: ex[1], version: ex[2] });
+				modules.push({ ...value, id: ex[1], version: ex[2], key: key });
 			}
 		}
 		return modules;

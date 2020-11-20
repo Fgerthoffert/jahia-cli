@@ -105,7 +105,7 @@ export default class ManifestRun extends Command {
           }
         } else if (job.type === 'module') {
           // eslint-disable-next-line no-await-in-loop
-          await installModule(flags, job.filepath, job.id);
+          await installModule(flags, job.filepath, true, job.id);
         } else if (job.type === 'webproject') {
           // eslint-disable-next-line no-await-in-loop
           await navPage(
