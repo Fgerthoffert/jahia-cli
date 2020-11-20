@@ -5,6 +5,7 @@ import { ConfigFlags } from '../../../global';
 import getModules from '../utils/get-modules';
 import isInstalled from '../utils/is-installed';
 import installMod from '../utils/install-module';
+import uninstallMod from '../utils/uninstall-module';
 
 /* eslint max-params: ["error", 5] */
 const installModule = async (
@@ -24,19 +25,32 @@ const installModule = async (
 			flags.jahiaAdminUsername,
 			flags.jahiaAdminUsername
 		);
+		
 		if (isInstalled(installedModules, moduleId, moduleVersion) === false || force === true) {
+			// Check if there is a different version of that module installed
 			console.log('Module needs to be installed');
-			await installMod(flags.jahiaAdminUrl, flags.jahiaAdminUsername, flags.jahiaAdminUsername, moduleFilepath);
-			const checkInstalledModules = await getModules(
-				flags.jahiaAdminUrl,
-				flags.jahiaAdminUsername,
-				flags.jahiaAdminUsername
-			);
-			if (isInstalled(checkInstalledModules, moduleId, moduleVersion) === true) {
-				console.log('Installation of the module successful');
-			} else {
+			const installedModule = await installMod(flags.jahiaAdminUrl, flags.jahiaAdminUsername, flags.jahiaAdminUsername, moduleFilepath);
+			if (installedModule === false || installedModule.length !== 1) {
 				console.log('Error: Unable to install module');
 				exit();
+			} else {
+				console.log('Installation of the module successful');
+				// Find modules different than installed and remove them
+				const otherModules = installedModules.filter((m: any) => m.id === installedModule[0].symbolicName && m.key !== installedModule[0].key)	
+				console.log('Aside from the modules just installed, the following modules are on the platform for id: ' + moduleId);			
+				console.log(otherModules);	
+				for (const mod of otherModules ) {
+					console.log('Removal of duplicate module: ' + mod.key);
+					// eslint-disable-next-line no-await-in-loop
+					await uninstallMod(flags.jahiaAdminUrl, flags.jahiaAdminUsername, flags.jahiaAdminUsername, mod.key);
+				}
+				const postInstallModules = await getModules(
+					flags.jahiaAdminUrl,
+					flags.jahiaAdminUsername,
+					flags.jahiaAdminUsername
+				);
+				console.log('The following modules are on the platform for id: ' + moduleId);			
+				console.log(postInstallModules.filter((m: any) => m.id === installedModule[0].symbolicName))
 			}
 		} else {
 			console.log('Module already installed');
