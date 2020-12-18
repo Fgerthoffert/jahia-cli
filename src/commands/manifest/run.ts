@@ -78,7 +78,7 @@ export default class ManifestRun extends Command {
         if (['webproject', 'groovy'].includes(job.type)) {
           if (browser === null) {
             // eslint-disable-next-line no-await-in-loop
-            browser = await launchPuppeteer(!flags.debug);
+            browser = await launchPuppeteer(!flags.debug, flags.nosandbox);
             // eslint-disable-next-line no-await-in-loop
             jahiaPage = await openJahia(browser, flags);
           }
@@ -144,7 +144,7 @@ export default class ManifestRun extends Command {
               'Unable to access tools directly, will be trying to authenticate and fetch the session ID from a cookie',
             );
             // eslint-disable-next-line no-await-in-loop
-            const browser = await launchPuppeteer(!flags.debug);
+            const browser = await launchPuppeteer(!flags.debug, flags.nosandbox);
             // eslint-disable-next-line no-await-in-loop
             const jahiaPage = await openJahia(browser, flags);
             // eslint-disable-next-line no-await-in-loop
@@ -210,7 +210,7 @@ export default class ManifestRun extends Command {
               'Unable to access tools directly, will be trying to authenticate and fetch the session ID from a cookie',
             );
             // eslint-disable-next-line no-await-in-loop
-            const browser = await launchPuppeteer(!flags.debug);
+            const browser = await launchPuppeteer(!flags.debug, flags.nosandbox);
             // eslint-disable-next-line no-await-in-loop
             const jahiaPage = await openJahia(browser, flags);
             // eslint-disable-next-line no-await-in-loop

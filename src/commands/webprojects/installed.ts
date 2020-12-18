@@ -30,7 +30,7 @@ export default class WebprojectsInstalled extends Command {
 
     const gClient = await graphqlClient(flags);
     await waitAlive(gClient, 500000); // Wait for 500s by default
-    const browser = await launchPuppeteer(!flags.debug);
+    const browser = await launchPuppeteer(!flags.debug, flags.nosandbox);
     const jahiaPage = await openJahia(browser, flags);
 
     await navPage(

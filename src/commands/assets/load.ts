@@ -46,7 +46,7 @@ export default class LoadAssets extends Command {
 		if (manifestContent.assets !== undefined && manifestContent.assets.length > 0) {
 			const gClient = await graphqlClient(flags);
 			await waitAlive(gClient, 500000); // Wait for 500s by default
-			const browser = await launchPuppeteer(!flags.debug);
+			const browser = await launchPuppeteer(!flags.debug, flags.nosandbox);
 			const jahiaPage = await openJahia(browser, flags);
 
 			for (const jahiaAsset of manifestContent.assets) {

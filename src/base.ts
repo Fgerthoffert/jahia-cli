@@ -48,6 +48,10 @@ export default abstract class extends Command {
       char: 'd',
       description: 'Enable debug mode (display chrome browser)',
     }),
+    nosandbox: flags.boolean({
+      char: 's',
+      description: 'Uses the --no-sandbox flag for performing actions requiring chromium',
+    }),    
     output: flags.string({
       description: 'Output values to the filesystem (such as payload)',
     }),

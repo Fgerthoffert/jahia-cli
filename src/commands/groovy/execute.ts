@@ -59,7 +59,7 @@ export default class GroovyExecute extends Command {
         'Unable to access tools directly, will be trying to authenticate and fetch the session ID from a cookie',
       );
 
-      const browser = await launchPuppeteer(!flags.debug);
+      const browser = await launchPuppeteer(!flags.debug, flags.nosandbox);
       const jahiaPage = await openJahia(browser, flags);
       await navPage(
         jahiaPage,
