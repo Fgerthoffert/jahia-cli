@@ -26,6 +26,7 @@ const installModule = async (
         ...formHeaders,
       },
       maxContentLength: Infinity,
+      maxBodyLength: Infinity,
       auth: {
         username,
         password,
