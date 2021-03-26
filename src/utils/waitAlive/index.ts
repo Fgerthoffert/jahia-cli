@@ -8,6 +8,7 @@ import { sleep } from '..';
 import gqlQuery from './gql';
 
 const isAlive = (data: any) => {
+  console.log(JSON.stringify(data.data))
   if (data.data === undefined || data.data.jcr.workspace !== 'EDIT') {
     return false;
   }
@@ -19,7 +20,8 @@ const checkStatus = async (
   timeout: number | undefined, // in ms
   timeSinceStart: number, // in ms
 ) => {
-  console.log('Time since start: ' + timeSinceStart + 'ms');
+  const currentTime = new Date();
+  console.log(currentTime.toISOString() + 'Time since start: ' + timeSinceStart + 'ms');
   let data: any = {}; // eslint-disable-line no-explicit-any
   if (
     timeout === undefined ||
