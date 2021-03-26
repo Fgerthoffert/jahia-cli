@@ -8,7 +8,7 @@ import { sleep } from '..';
 import gqlQuery from './gql';
 
 const isAlive = (data: any) => {
-  console.log(JSON.stringify(data.data))
+  console.log(`API response: ${JSON.stringify(data.data)}`)
   if (data.data === undefined || data.data.jcr.workspace !== 'EDIT') {
     return false;
   }
@@ -27,6 +27,7 @@ const checkStatus = async (
     timeout === undefined ||
     (timeout !== undefined && timeSinceStart < timeout)
   ) {
+    const callStart = performance.now()
     try {
       // eslint-disable-next-line no-await-in-loop
       data = await gqlClient.query({
@@ -39,9 +40,10 @@ const checkStatus = async (
     } catch (error) {
       console.log(error.message);
     }
-    const time = Math.round(timeSinceStart + performance.now());
     if (isAlive(data) === false) {
       await sleep(2000);
+      const callDuration = performance.now() - callStart
+      const time = Math.round(timeSinceStart + callDuration)      
       data = await checkStatus(gqlClient, timeout, time);
     }
   }
