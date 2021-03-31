@@ -53,8 +53,8 @@ const installModule = async (
 				}
 		})
 		if (files.length === 0) {
-			console.error('ERROR: Unable to find matching file')
-			exit()
+			console.error('ERROR: Unable to find matching file, Provisioning could not be executed, EXITING')
+			exit(1)
 		} 	
 		console.log(files)
 		console.log(`${new Date().toISOString()} - Finding latest version of the module from the files array`)
