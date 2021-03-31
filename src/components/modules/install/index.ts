@@ -1,6 +1,7 @@
 /* eslint-disable max-depth */
 import { exit } from '@oclif/errors';
 import * as fs from 'fs';
+import * as path from 'path';
 import * as semver from 'semver';
 
 import { ConfigFlags } from '../../../global';
@@ -30,7 +31,11 @@ const installModule = async (
 			// Deconstruct the version to filter out modules containing moduleId in their name
 			// Example: augmented-search and augmented-search-ui
 			.filter((f: string) => {
-				const moduleVersion = semver.coerce(f)
+				let versionParse = path.basename(f)
+				if (moduleId !== undefined) {
+					versionParse = f.replace(moduleId,'')
+				}
+				const moduleVersion = semver.coerce(versionParse)
 				if (f.includes(`${moduleId}-${moduleVersion}.jar`)) {
 					return true
 				}
