@@ -1,6 +1,5 @@
 import { flags } from '@oclif/command';
 import { performance } from 'perf_hooks';
-import * as fs from 'fs';
 
 import Command from '../../base';
 
@@ -23,7 +22,7 @@ export default class ModulesInstall extends Command {
 		}),
 		id: flags.string({
 			required: true,
-			description: 'Module Id (string or comma separated strings)'
+			description: 'Module Id'
 		}),
 		force: flags.boolean({
 			description: 'Forces modules installation (even if already installed)'
@@ -44,10 +43,10 @@ export default class ModulesInstall extends Command {
 			exit();
 		}
 
-		if (!fs.existsSync(flags.file)) {
-			console.log('ERROR: Unable to access file: ' + flags.file);
-			exit();
-		}
+		// if (!fs.existsSync(flags.file)) {
+		// 	console.log('ERROR: Unable to access file: ' + flags.file);
+		// 	exit();
+		// }
 
 		const gClient = await graphqlClient(flags);
 		await waitAlive(gClient, 500000); // Wait for 500s by default
