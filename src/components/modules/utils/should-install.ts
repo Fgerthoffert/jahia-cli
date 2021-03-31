@@ -9,6 +9,7 @@ const shouldInstall = (installedModules: Array<any>, moduleId: string, moduleVer
 	// Search for the module ID in the list of installed modules
 	const installedModule = installedModules.find((m) => m.id === moduleId)
 	if (installedModule === undefined) {
+		console.log(`${new Date().toISOString()} - The module ${moduleId} was not detected on the remote Jahia`)
 		return true
 	}
 	

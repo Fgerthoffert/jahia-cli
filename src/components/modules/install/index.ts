@@ -10,6 +10,7 @@ import getModules from '../utils/get-modules';
 import shouldInstall from '../utils/should-install';
 import installMod from '../utils/install-module';
 import uninstallMod from '../utils/uninstall-module';
+import { sleep } from '../../../utils'
 
 /* eslint max-params: ["error", 5] */
 const installModule = async (
@@ -96,13 +97,19 @@ const installModule = async (
 						await uninstallMod(flags.jahiaAdminUrl, flags.jahiaAdminUsername, flags.jahiaAdminPassword, mod.key);
 					}
 				}
+				await sleep(1000);
 				const postInstallModules = await getModules(
 					flags.jahiaAdminUrl,
 					flags.jahiaAdminUsername,
 					flags.jahiaAdminPassword
 				);
-				console.log(`${new Date().toISOString()} - The following modules have been detected on the platform for id: ${moduleId}`);			
-				console.log(postInstallModules.filter((m: any) => m.id === installedModule[0].symbolicName))
+				console.log(`${new Date().toISOString()} - The following modules have been detected on the platform for id: ${moduleId}`);		
+				const detectedModule = 	postInstallModules.filter((m: any) => m.id === installedModule[0].symbolicName)
+				console.log(detectedModule)
+				if (detectedModule.length === 0) {
+					console.log(`${new Date().toISOString()} - ERROR: Could not detect module ${moduleId} on the platform, there was likely an issue during module provisioning. EXITING`);		
+					exit(1)
+				}
 			}
 		} else {
 			console.log(`${new Date().toISOString()} - Module already installed`);
