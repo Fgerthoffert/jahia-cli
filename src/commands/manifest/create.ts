@@ -94,6 +94,12 @@ export default class ManifestCreate extends Command {
           filepath: '/tmp/addstuff-1.3.jar',
         },
         {
+          type: 'module',
+          id: 'addstuff',
+          forceInstall: true,
+          filepath: '/tmp/addstuff-1.3.jar',
+        },        
+        {
           type: 'asset',
           fetch: 'http',
           source:

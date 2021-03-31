@@ -77,7 +77,7 @@ const installModule = async (
 		
 		if (shouldInstall(installedModules, moduleId, moduleVersion) === true || force === true) {
 			// Check if there is a different version of that module installed
-			console.log(`${new Date().toISOString()} - Module will be be installed`);
+			console.log(`${new Date().toISOString()} - Module will be installed`);
 			const installedModule = await installMod(flags.jahiaAdminUrl, flags.jahiaAdminUsername, flags.jahiaAdminPassword, moduleFilepath);
 			if (installedModule === false || installedModule.length !== 1) {
 				console.log('Error: Unable to install module');

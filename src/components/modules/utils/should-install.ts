@@ -25,7 +25,6 @@ const shouldInstall = (installedModules: Array<any>, moduleId: string, moduleVer
 	// If remote version is lower than version to install, then should install
 	if (semver.lt(installedModuleVersion, moduleVersion)) {
 		console.log(`${new Date().toISOString()} - Version ${installedModuleVersion} is lower than: ${moduleVersion}`)
-
 		return true
 	}
 
