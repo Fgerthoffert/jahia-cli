@@ -44,8 +44,12 @@ const installModule = async (
 				}
 				return false
 			})
-			.map((f) => {				
-				const versionCoerce = semver.coerce(f)		
+			.map((f) => {
+				let versionParse = path.basename(f)
+				if (moduleId !== undefined) {
+					versionParse = f.replace(moduleId,'')
+				}
+				const versionCoerce = semver.coerce(versionParse)				
 				return {
 					moduleId,
 					moduleVersion: versionCoerce === null ? null: versionCoerce.version,
