@@ -74,7 +74,8 @@ const installModule = async (
 			flags.jahiaAdminUsername,
 			flags.jahiaAdminPassword
 		);
-		
+		console.log(`${new Date().toISOString()} - Module force install is set to: ${force}`);
+
 		if (shouldInstall(installedModules, moduleId, moduleVersion) === true || force === true) {
 			// Check if there is a different version of that module installed
 			console.log(`${new Date().toISOString()} - Module will be installed`);

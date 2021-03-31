@@ -20,7 +20,7 @@ const shouldInstall = (installedModules: Array<any>, moduleId: string, moduleVer
 		return false
 	}
 
-	console.log(`${new Date().toISOString()} - Detected ${moduleId} in version: ${installedModule.version} on the remote Jahia`)
+	console.log(`${new Date().toISOString()} - Detected ${moduleId} in version: ${installedModuleVersion} on the remote Jahia, local artifact version is: ${moduleVersion}`)
 
 	// If remote version is lower than version to install, then should install
 	if (semver.lt(installedModuleVersion, moduleVersion)) {
