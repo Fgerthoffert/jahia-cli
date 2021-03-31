@@ -21,7 +21,7 @@ const checkStatus = async (
   timeSinceStart: number, // in ms
 ) => {
   const currentTime = new Date();
-  console.log(currentTime.toISOString() + 'Time since start: ' + timeSinceStart + 'ms');
+  console.log(currentTime.toISOString() + ' - Time since start: ' + timeSinceStart + 'ms');
   let data: any = {}; // eslint-disable-line no-explicit-any
   if (
     timeout === undefined ||
