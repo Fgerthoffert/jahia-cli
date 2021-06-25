@@ -1,8 +1,10 @@
 import { flags } from '@oclif/command';
 import { performance } from 'perf_hooks';
 import * as loadYamlFile from 'load-yaml-file';
-import * as download from 'download';
+import * as fetch from 'node-fetch';
 import * as fs from 'fs';
+import * as util from 'util';
+import { pipeline } from 'stream';
 
 import Command from '../../base';
 
@@ -61,10 +63,15 @@ export default class LoadAssets extends Command {
 							}
 						};
 					}
+					const streamPipeline = util.promisify(pipeline);
 					// eslint-disable-next-line no-await-in-loop
-					await download(jahiaAsset.source, undefined, options).then((data) => {
-						fs.writeFileSync(jahiaAsset.filepath, data);
-					});
+					const response = await fetch(jahiaAsset.source, options).catch((error: any) => console.log(error));
+					// eslint-disable-next-line no-await-in-loop
+					await streamPipeline(response.body, fs.createWriteStream(jahiaAsset.filepath));
+					if (response.status > 400) {
+						console.log('ERROR fetching artifact')
+						console.log(response)
+					}
 				} else {
 					console.log('WARNING: Asset type not supported');
 				}

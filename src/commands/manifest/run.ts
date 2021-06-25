@@ -5,8 +5,10 @@ import cli from 'cli-ux';
 import { performance } from 'perf_hooks';
 import * as loadYamlFile from 'load-yaml-file';
 import * as fs from 'fs';
-import * as download from 'download';
 import { v4 as uuidv4 } from 'uuid';
+import * as fetch from 'node-fetch';
+import * as util from 'util';
+import { pipeline } from 'stream';
 
 import Command from '../../base';
 
@@ -59,7 +61,13 @@ export default class ManifestRun extends Command {
     if (["htt", "ftp"].includes(flags.manifest.slice(0,3))) {
       manifestfile = '/tmp/' + uuidv4() + '.yml'
       console.log('Processing manifest from URL, saving it to: ' + manifestfile);
-      fs.writeFileSync(manifestfile, await download(flags.manifest));
+      const streamPipeline = util.promisify(pipeline);
+      const response = await fetch(flags.manifest).catch((error: any) => console.log(error));
+      await streamPipeline(response.body, fs.createWriteStream(manifestfile));
+      if (response.status > 400) {
+        console.log('ERROR fetching artifact')
+        console.log(response)
+      }      
     }
     if (fs.existsSync(manifestfile) === false) {
       console.log('ERROR: Unable to locate manifest file');
