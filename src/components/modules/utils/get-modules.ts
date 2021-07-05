@@ -2,6 +2,9 @@ import axios from 'axios';
 
 const getModules = async (url: string, username: string, password: string) => {
 	const modulesResponse = await axios.get(url + '/modules/api/bundles/org.jahia.modules/*/*/_info', {
+    headers: {
+      Origin: url
+    },
 		auth: {
 			username,
 			password
