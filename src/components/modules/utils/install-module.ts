@@ -24,6 +24,7 @@ const installModule = async (
     installResponse = await axios.post(url + '/modules/api/bundles', form, {
       headers: {
         ...formHeaders,
+        Origin: url
       },
       maxContentLength: Infinity,
       maxBodyLength: Infinity,
