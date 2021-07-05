@@ -3,6 +3,7 @@ import ApolloClient from 'apollo-client';
 import { ApolloLink } from 'apollo-link';
 import { HttpLink } from 'apollo-link-http';
 import fetch from 'node-fetch';
+import {Base64} from 'js-base64'
 
 import { ConfigFlags } from '../../../global';
 
@@ -16,8 +17,7 @@ const graphqlClient = async (cmdConfig: ConfigFlags) => {
   const authMiddleware = new ApolloLink((operation: any, forward: any) => {
     operation.setContext({
       headers: {
-        authorization: `Basic ${cmdConfig.jahiaAdminUsername}:${cmdConfig.jahiaAdminPassword}`,
-        Origin: cmdConfig.jahiaAdminUrl
+        authorization: `Basic ${Base64.btoa(cmdConfig.jahiaAdminUsername + ':' + cmdConfig.jahiaAdminPassword)}`
       },
     });
     return forward(operation).map(
@@ -25,6 +25,7 @@ const graphqlClient = async (cmdConfig: ConfigFlags) => {
         errors: Array<object> | undefined;
         data: { errors: Array<object> };
       }) => {
+        console.log(JSON.stringify(response))
         if (response.errors !== undefined && response.errors.length > 0) {
           response.data.errors = response.errors;
         }
@@ -33,7 +34,20 @@ const graphqlClient = async (cmdConfig: ConfigFlags) => {
     );
   });
 
-  const link = ApolloLink.from([authMiddleware, httpLink]);
+  const refererMiddleware = new ApolloLink((operation, forward) => {
+    operation.setContext(({ headers = {} }) => ({
+      headers: {
+        ...headers,
+        referer: cmdConfig.jahiaAdminUrl,
+      }
+    }));
+
+    return forward(operation);
+  })  
+
+  const link = ApolloLink.from([authMiddleware, refererMiddleware, httpLink]);
+
+  console.log(link)
 
   return new ApolloClient({
     link,
