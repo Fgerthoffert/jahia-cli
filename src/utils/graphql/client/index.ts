@@ -17,6 +17,7 @@ const graphqlClient = async (cmdConfig: ConfigFlags) => {
     operation.setContext({
       headers: {
         authorization: `Basic ${cmdConfig.jahiaAdminUsername}:${cmdConfig.jahiaAdminPassword}`,
+        Origin: cmdConfig.jahiaAdminUrl
       },
     });
     return forward(operation).map(
