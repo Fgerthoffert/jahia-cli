@@ -14,7 +14,8 @@ const uninstallModule = async (
   try {
     uninstallResponse = await axios.post(url + '/modules/api/bundles/' + key + '/_uninstall', null, {
       headers: {
-        authorization: `Basic ${Base64.btoa(username + ':' + password)}`
+        authorization: `Basic ${Base64.btoa(username + ':' + password)}`,
+        Origin: url
       },
     });
   } catch (error) {
