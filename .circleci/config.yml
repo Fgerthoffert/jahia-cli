@@ -128,9 +128,9 @@ jobs:
       - run:
           name: Generate the oclif manifest
           command: oclif-dev manifest
-      - run:
-          name: Update the oclif readme
-          command: oclif-dev readme
+#       - run:
+#           name: Update the oclif readme
+#           command: oclif-dev readme
       - run:
           name: ls jahia-cli content
           command: ls -lah ./
