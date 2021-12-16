@@ -37,7 +37,7 @@ export default class ModulesCheck extends Command {
     const installedModules = await getModules(
       flags.jahiaAdminUrl,
       flags.jahiaAdminUsername,
-      flags.jahiaAdminUsername,
+      flags.jahiaAdminPassword,
     );
     const reqModule = installedModules.find(m => m.id === flags.id);
     if (reqModule === undefined) {
