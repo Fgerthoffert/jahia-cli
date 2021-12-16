@@ -112,7 +112,7 @@ jobs:
           command: sudo npm -g install typescript@3.9.4
       - run:
           name: Install oclif-dev
-          command: sudo npm -g install @oclif/dev-cli
+          command: sudo npm -g install @oclif/dev-cli @oclif/help
       - run:
           name: Authenticate with NPM registry
           command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > .npmrc
