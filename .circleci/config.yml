@@ -100,7 +100,8 @@ jobs:
   npm-publish:
     <<: *workdir
     docker:
-      - image: circleci/node:latest-browsers
+      - image: circleci/node@sha256:603ec677878691528698b953920e16400458faf08c850d6f6a4b7f94f33710b1
+#       - image: circleci/node:latest-browsers
     environment:
       PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: true
     working_directory: ~/jahia-cli
@@ -108,7 +109,7 @@ jobs:
       - *attach-workspace
       - run:
           name: Install Typescript
-          command: sudo npm -g install typescript@4.4.4
+          command: sudo npm -g install typescript@4.4.2
       - run:
           name: Install oclif-dev
           command: sudo npm -g install @oclif/dev-cli
