@@ -108,7 +108,7 @@ jobs:
       - *attach-workspace
       - run:
           name: Install Typescript
-          command: sudo npm -g install typescript
+          command: sudo npm -g install typescript@4.4.4
       - run:
           name: Install oclif-dev
           command: sudo npm -g install @oclif/dev-cli
