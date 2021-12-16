@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const getModules = async (url: string, username: string, password: string) => {
-	const modulesResponse = await axios.get(url + '/modules/api/bundles/org.jahia.modules/*/*/_info', {
+	const modulesResponse = await axios.get(url + '/modules/api/bundles/*/*/*/_info', {
     headers: {
       Origin: url
     },
@@ -13,7 +13,7 @@ const getModules = async (url: string, username: string, password: string) => {
 	if (modulesResponse.data !== undefined) {
 		const instanceModules: any = Object.values(modulesResponse.data)[0];
 		const modules = [];
-		const regExp = new RegExp(/org\.jahia\.modules\/(.*)\/(.*)/);
+		const regExp = new RegExp(/.*\/(.*)\/(.*)/);
 
 		const instanceModulesArr: Array<any> = Object.entries(instanceModules);
 		for (const [ key, value ] of instanceModulesArr) {
